@@ -23,6 +23,7 @@ function Index() {
       <div className="relative" style={{ zIndex: 1 }}>
         <Navbar />
         <Hero />
+        <Catalog />
         <TheShift />
         <TheMechanism />
         <TheFramework />
