@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { BulletsBackground } from "@/components/BulletsBackground";
+import { Catalog } from "@/components/Catalog";
 import {
   TheShift,
   TheMechanism,
