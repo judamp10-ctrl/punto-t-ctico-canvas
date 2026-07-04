@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { BulletsBackground } from "@/components/BulletsBackground";
+import { Catalog } from "@/components/Catalog";
 import {
   TheShift,
   TheMechanism,
@@ -22,6 +23,7 @@ function Index() {
       <div className="relative" style={{ zIndex: 1 }}>
         <Navbar />
         <Hero />
+        <Catalog />
         <TheShift />
         <TheMechanism />
         <TheFramework />

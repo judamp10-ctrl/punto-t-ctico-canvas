@@ -23,7 +23,7 @@ export function Hero() {
         style={{
           zIndex: 0,
           background:
-            "radial-gradient(ellipse at center, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.85) 70%, #000 100%)",
+            "radial-gradient(ellipse at center, rgba(10,10,10,0.35) 0%, rgba(10,10,10,0.7) 70%, #000 100%)",
         }}
       />
       {/* Vignette + grain */}
