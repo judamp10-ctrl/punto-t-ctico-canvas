@@ -1,30 +1,36 @@
 import { useMemo } from "react";
 
-// SVG bullet casing — brass tone
+// SVG 9mm brass casing — larger, crisp, metallic amber highlights
 function BulletSVG({ opacity = 1 }: { opacity?: number }) {
   return (
-    <svg width="10" height="28" viewBox="0 0 10 28" fill="none" style={{ opacity }}>
+    <svg width="20" height="56" viewBox="0 0 20 56" fill="none" style={{ opacity, display: "block" }}>
       <defs>
-        <linearGradient id="brass" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0%" stopColor="#6b4610" />
-          <stop offset="45%" stopColor="#f5c26b" />
-          <stop offset="55%" stopColor="#c98a2a" />
-          <stop offset="100%" stopColor="#4a2f0a" />
-        </linearGradient>
-        <linearGradient id="tip" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0%" stopColor="#3a2508" />
-          <stop offset="50%" stopColor="#a8701e" />
+        <linearGradient id="brass-body" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stopColor="#3a2408" />
+          <stop offset="20%" stopColor="#8a5a12" />
+          <stop offset="45%" stopColor="#ffd98a" />
+          <stop offset="55%" stopColor="#f5a623" />
+          <stop offset="80%" stopColor="#7a4d10" />
           <stop offset="100%" stopColor="#2a1a05" />
+        </linearGradient>
+        <linearGradient id="brass-tip" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stopColor="#2a1a05" />
+          <stop offset="45%" stopColor="#d99847" />
+          <stop offset="55%" stopColor="#c07a1a" />
+          <stop offset="100%" stopColor="#1a1004" />
         </linearGradient>
       </defs>
       {/* Casing body */}
-      <rect x="1" y="8" width="8" height="18" rx="0.5" fill="url(#brass)" />
+      <rect x="2" y="16" width="16" height="36" rx="1" fill="url(#brass-body)" />
       {/* Rim */}
-      <rect x="0.5" y="24" width="9" height="2.5" fill="#2a1a05" />
-      {/* Bullet tip */}
-      <path d="M1 8 Q5 0 9 8 Z" fill="url(#tip)" />
-      {/* Highlight */}
-      <rect x="4.4" y="9" width="0.6" height="15" fill="#fff2c0" opacity="0.35" />
+      <rect x="1" y="50" width="18" height="5" fill="#1a1004" />
+      <rect x="1" y="50" width="18" height="1" fill="#f5a623" opacity="0.5" />
+      {/* Bullet tip / ogive */}
+      <path d="M2 16 Q10 0 18 16 Z" fill="url(#brass-tip)" />
+      {/* Specular highlight */}
+      <rect x="8.6" y="18" width="1.2" height="30" fill="#fff4c8" opacity="0.55" />
+      {/* Secondary edge glow */}
+      <rect x="16.6" y="18" width="0.6" height="30" fill="#f5a623" opacity="0.35" />
     </svg>
   );
 }
@@ -37,23 +43,26 @@ interface Bullet {
   delay: number;
   blur: number;
   opacity: number;
-  drift: number;
+  wobble: number;
   rotate: number;
+  spin: number;
 }
 
-export function BulletsBackground({ count = 28 }: { count?: number }) {
+export function BulletsBackground({ count = 24 }: { count?: number }) {
   const bullets = useMemo<Bullet[]>(() => {
     const rand = (min: number, max: number) => Math.random() * (max - min) + min;
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       left: rand(0, 100),
-      scale: rand(0.5, 1.6),
-      duration: rand(14, 32),
+      scale: rand(0.7, 1.4),
+      duration: rand(16, 34),
       delay: rand(-30, 0),
-      blur: Math.random() < 0.4 ? rand(1, 3) : 0,
-      opacity: rand(0.5, 1),
-      drift: rand(-40, 40),
-      rotate: rand(-40, 40),
+      // depth of field: farther bullets slightly blurred
+      blur: Math.random() < 0.45 ? rand(0.8, 2.4) : 0,
+      opacity: rand(0.55, 1),
+      wobble: rand(-8, 8), // tiny horizontal deviation (px)
+      rotate: rand(-12, 12), // starting tilt
+      spin: rand(20, 90) * (Math.random() < 0.5 ? -1 : 1), // gentle rotation
     }));
   }, [count]);
 
@@ -61,43 +70,32 @@ export function BulletsBackground({ count = 28 }: { count?: number }) {
     <div
       aria-hidden
       className="pointer-events-none fixed inset-0 overflow-hidden"
-      style={{ zIndex: 0, opacity: 0.18 }}
+      style={{ zIndex: 0, opacity: 0.25 }}
     >
       {bullets.map((b) => (
         <div
           key={b.id}
-          className="absolute top-[-10%] will-change-transform"
+          className="absolute top-[-12%] will-change-transform"
           style={{
             left: `${b.left}%`,
-            animation: `bullet-fall-${b.id % 4} ${b.duration}s linear ${b.delay}s infinite`,
+            animation: `bullet-fall ${b.duration}s linear ${b.delay}s infinite`,
             transform: `scale(${b.scale})`,
-            filter: b.blur ? `blur(${b.blur}px)` : undefined,
-            // Provide per-bullet CSS vars used by keyframes
-            ["--drift" as string]: `${b.drift}px`,
+            filter: b.blur
+              ? `blur(${b.blur}px) drop-shadow(0 0 4px rgba(245,166,35,0.35))`
+              : `drop-shadow(0 0 3px rgba(245,166,35,0.4))`,
+            ["--wobble" as string]: `${b.wobble}px`,
             ["--rot-start" as string]: `${b.rotate}deg`,
-            ["--rot-end" as string]: `${b.rotate + 360}deg`,
+            ["--rot-end" as string]: `${b.rotate + b.spin}deg`,
           }}
         >
           <BulletSVG opacity={b.opacity} />
         </div>
       ))}
       <style>{`
-        @keyframes bullet-fall-0 {
-          0% { transform: translate3d(0, -10vh, 0) rotate(var(--rot-start)); }
-          100% { transform: translate3d(var(--drift), 110vh, 0) rotate(var(--rot-end)); }
-        }
-        @keyframes bullet-fall-1 {
-          0% { transform: translate3d(0, -10vh, 0) rotate(var(--rot-start)); }
-          100% { transform: translate3d(calc(var(--drift) * -1), 110vh, 0) rotate(var(--rot-end)); }
-        }
-        @keyframes bullet-fall-2 {
-          0% { transform: translate3d(0, -10vh, 0) rotate(var(--rot-start)); }
-          50% { transform: translate3d(calc(var(--drift) * 0.5), 55vh, 0) rotate(calc(var(--rot-start) + 180deg)); }
-          100% { transform: translate3d(var(--drift), 110vh, 0) rotate(var(--rot-end)); }
-        }
-        @keyframes bullet-fall-3 {
-          0% { transform: translate3d(0, -10vh, 0) rotate(var(--rot-start)); }
-          100% { transform: translate3d(calc(var(--drift) * 0.6), 110vh, 0) rotate(calc(var(--rot-end) - 180deg)); }
+        @keyframes bullet-fall {
+          0%   { transform: translate3d(0, -12vh, 0) rotate(var(--rot-start)); }
+          50%  { transform: translate3d(var(--wobble), 50vh, 0) rotate(calc((var(--rot-start) + var(--rot-end)) / 2)); }
+          100% { transform: translate3d(0, 115vh, 0) rotate(var(--rot-end)); }
         }
         @media (prefers-reduced-motion: reduce) {
           .pointer-events-none [style*="bullet-fall"] { animation: none !important; }
