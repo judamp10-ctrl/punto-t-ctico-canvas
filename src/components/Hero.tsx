@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import heroGun from "@/assets/hero-gun.png";
+import heroBg from "@/assets/hero-bg.jpg.asset.json";
 
 export function Hero() {
   return (
