@@ -5,6 +5,27 @@ import heroBg from "@/assets/hero-bg.jpg.asset.json";
 export function Hero() {
   return (
     <section className="relative flex h-[100dvh] min-h-[600px] w-full flex-col overflow-hidden bg-background pt-16">
+      {/* Background image */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          zIndex: 0,
+          backgroundImage: `url(${heroBg.url})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      {/* Dark overlay for depth */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          zIndex: 0,
+          background:
+            "radial-gradient(ellipse at center, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.85) 70%, #000 100%)",
+        }}
+      />
       {/* Vignette + grain */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#000_95%)]" />
       <div className="pointer-events-none absolute inset-0 opacity-40 bg-grain mix-blend-overlay" />
