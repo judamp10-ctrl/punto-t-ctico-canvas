@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
+
+
 export function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-[color:var(--amber)]/20 bg-black/70 backdrop-blur-md">
@@ -26,13 +28,6 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            to="/perfil-operativo"
-            className="group hidden items-center gap-2 border border-[color:var(--amber)]/40 bg-black/40 px-3 py-2 font-mono-tech text-[10px] uppercase tracking-wider text-amber/90 transition-all hover:border-[color:var(--amber)] hover:text-amber md:inline-flex"
-          >
-            <span className="h-1.5 w-1.5 bg-[color:var(--amber)] shadow-[0_0_8px_var(--amber)]" />
-            Perfil Operativo
-          </Link>
           <a
             href="#asesoria"
             className="group inline-flex items-center gap-2 border border-[color:var(--amber)]/70 bg-transparent px-4 py-2 font-mono-tech text-[11px] text-amber transition-all hover:bg-[color:var(--amber)] hover:text-primary-foreground"
@@ -41,6 +36,7 @@ export function Navbar() {
             Solicitar Asesoría
           </a>
         </div>
+
       </div>
     </header>
   );
