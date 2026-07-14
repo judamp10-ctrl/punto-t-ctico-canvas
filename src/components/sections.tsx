@@ -1,6 +1,8 @@
 import { motion } from "motion/react";
 import { useState } from "react";
-import { AlertTriangle, Wrench, ScrollText, ShieldCheck, FileCheck, Fingerprint, Search, FileText, PackageCheck, MessageCircle, Instagram } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { AlertTriangle, Wrench, ScrollText, ShieldCheck, FileCheck, Fingerprint, Search, FileText, PackageCheck, MessageCircle, Instagram, Lock } from "lucide-react";
+
 
 /* ---------- Section shell ---------- */
 function SectionLabel({ index, label }: { index: string; label: string }) {
@@ -360,10 +362,20 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col justify-between gap-3 border-t border-[color:var(--amber)]/15 pt-6 font-mono-tech text-[10px] text-muted-foreground md:flex-row">
+        <div className="mt-12 flex flex-col justify-between gap-3 border-t border-[color:var(--amber)]/15 pt-6 font-mono-tech text-[10px] text-muted-foreground md:flex-row md:items-center">
           <div>© {new Date().getFullYear()} · PUNTO TÁCTICO · BOGOTÁ, CO</div>
-          <div className="text-amber/80">SYS · ONLINE · v1.0</div>
+          <div className="flex items-center gap-4">
+            <Link
+              to="/perfil-operativo"
+              className="inline-flex items-center gap-1.5 border border-[color:var(--amber)]/30 px-2.5 py-1 uppercase tracking-widest text-amber/80 transition hover:border-[color:var(--amber)] hover:text-amber"
+            >
+              <Lock className="h-3 w-3" />
+              Perfil Operativo
+            </Link>
+            <span className="text-amber/80">SYS · ONLINE · v1.0</span>
+          </div>
         </div>
+
       </div>
     </footer>
   );
