@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import {
   Package,
   Boxes,
@@ -16,8 +16,12 @@ import {
   TrendingUp,
   Clock,
   ShieldCheck,
+  LogOut,
+  User,
+  Inbox,
 } from "lucide-react";
 import { BulletsBackground } from "@/components/BulletsBackground";
+import { PRODUCTS } from "@/components/Catalog";
 
 export const Route = createFileRoute("/perfil-operativo")({
   head: () => ({
@@ -29,6 +33,178 @@ export const Route = createFileRoute("/perfil-operativo")({
   }),
   component: PerfilOperativo,
 });
+
+// NOTE: Client-side auth only for internal demo/staging. Do not treat as real security.
+const OP_USER = "comandante";
+const OP_PASS = "puntotactico2026";
+const AUTH_KEY = "pt.op.auth";
+
+function PerfilOperativo() {
+  const [authed, setAuthed] = useState(false);
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    try {
+      setAuthed(sessionStorage.getItem(AUTH_KEY) === "1");
+    } catch {
+      // ignore
+    }
+    setChecked(true);
+  }, []);
+
+  if (!checked) return null;
+
+  if (!authed) {
+    return (
+      <div className="relative min-h-screen bg-background text-foreground">
+        <BulletsBackground />
+        <div className="relative" style={{ zIndex: 1 }}>
+          <LoginScreen
+            onSuccess={() => {
+              try {
+                sessionStorage.setItem(AUTH_KEY, "1");
+              } catch {
+                // ignore
+              }
+              setAuthed(true);
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return <Console onLogout={() => {
+    try { sessionStorage.removeItem(AUTH_KEY); } catch { /* ignore */ }
+    setAuthed(false);
+  }} />;
+}
+
+/* ---------- Login screen ---------- */
+function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
+  const [user, setUser] = useState("");
+  const [pass, setPass] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setTimeout(() => {
+      if (user.trim().toLowerCase() === OP_USER && pass === OP_PASS) {
+        onSuccess();
+      } else {
+        setError("Credenciales inválidas · Acceso denegado.");
+        setLoading(false);
+      }
+    }, 450);
+  };
+
+  return (
+    <div className="relative flex min-h-screen items-center justify-center px-4 py-10">
+      <div className="pointer-events-none absolute inset-0 opacity-30 bg-grain mix-blend-overlay" />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.06]"
+        style={{
+          backgroundImage:
+            "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)",
+          backgroundSize: "50px 50px",
+        }}
+      />
+
+      <div className="relative w-full max-w-md">
+        <div className="mb-4 flex items-center justify-between font-mono-tech text-[10px] uppercase tracking-[0.25em] text-amber/80">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-amber">
+            <ArrowLeft className="h-3 w-3" /> Volver
+          </Link>
+          <span className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 animate-hud-pulse rounded-full bg-[color:var(--amber)] shadow-[0_0_8px_var(--amber)]" />
+            SECURE · LOGIN
+          </span>
+        </div>
+
+        <div className="relative border border-[color:var(--amber)]/40 bg-black/80 p-8 backdrop-blur shadow-[0_0_60px_-15px_rgba(245,166,35,0.35)]">
+          <span className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l border-t border-[color:var(--amber)]" />
+          <span className="pointer-events-none absolute right-0 top-0 h-4 w-4 border-r border-t border-[color:var(--amber)]" />
+          <span className="pointer-events-none absolute bottom-0 left-0 h-4 w-4 border-b border-l border-[color:var(--amber)]" />
+          <span className="pointer-events-none absolute bottom-0 right-0 h-4 w-4 border-b border-r border-[color:var(--amber)]" />
+
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center border border-[color:var(--amber)]/70">
+              <Lock className="h-4 w-4 text-amber" />
+            </div>
+            <div className="leading-none">
+              <div className="font-display text-sm font-bold uppercase tracking-[0.25em]">
+                Punto <span className="text-amber">Táctico</span>
+              </div>
+              <div className="mt-1 font-mono-tech text-[9px] text-muted-foreground">ADMIN · CONSOLE / AUTH</div>
+            </div>
+          </div>
+
+          <div className="mt-6 border-y border-[color:var(--amber)]/20 py-3 font-mono-tech text-[10px] uppercase tracking-widest text-amber">
+            [ ESTADO: Acceso Restringido · Personal Autorizado ]
+          </div>
+
+          <form onSubmit={submit} className="mt-6 space-y-4">
+            <label className="block">
+              <span className="font-mono-tech text-[10px] uppercase tracking-widest text-amber/80">Operador</span>
+              <div className="mt-2 flex items-center gap-2 border border-[color:var(--amber)]/30 bg-black/60 px-3 py-2 focus-within:border-[color:var(--amber)]">
+                <User className="h-3.5 w-3.5 text-amber/70" />
+                <input
+                  autoFocus
+                  type="text"
+                  autoComplete="username"
+                  value={user}
+                  onChange={(e) => setUser(e.target.value)}
+                  className="w-full bg-transparent font-mono-tech text-[13px] text-foreground outline-none placeholder:text-muted-foreground/60"
+                  placeholder="usuario"
+                />
+              </div>
+            </label>
+            <label className="block">
+              <span className="font-mono-tech text-[10px] uppercase tracking-widest text-amber/80">Contraseña</span>
+              <div className="mt-2 flex items-center gap-2 border border-[color:var(--amber)]/30 bg-black/60 px-3 py-2 focus-within:border-[color:var(--amber)]">
+                <Lock className="h-3.5 w-3.5 text-amber/70" />
+                <input
+                  type="password"
+                  autoComplete="current-password"
+                  value={pass}
+                  onChange={(e) => setPass(e.target.value)}
+                  className="w-full bg-transparent font-mono-tech text-[13px] text-foreground outline-none placeholder:text-muted-foreground/60"
+                  placeholder="••••••••"
+                />
+              </div>
+            </label>
+
+            {error && (
+              <div className="border border-destructive/40 bg-destructive/10 px-3 py-2 font-mono-tech text-[11px] text-destructive">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex w-full items-center justify-between border border-[color:var(--amber)] bg-[color:var(--amber)] px-5 py-3 font-mono-tech text-[11px] uppercase tracking-widest text-primary-foreground transition-all hover:shadow-[0_0_30px_-4px_var(--amber)] disabled:opacity-60"
+            >
+              <span>{loading ? "Autenticando…" : "Iniciar Sesión"}</span>
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+                <path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="currentColor" strokeWidth="1.4" />
+              </svg>
+            </button>
+          </form>
+
+          <div className="mt-6 border-t border-[color:var(--amber)]/15 pt-3 font-mono-tech text-[9px] uppercase tracking-widest text-muted-foreground">
+            SESSION · A-0001 · CO-BOG
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Console (authenticated) ---------- */
 
 type TabKey =
   | "productos"
@@ -51,16 +227,15 @@ const TABS: { key: TabKey; label: string; icon: React.ComponentType<{ className?
   { key: "configuracion", label: "Configuración", icon: Settings },
 ];
 
-function PerfilOperativo() {
+function Console({ onLogout }: { onLogout: () => void }) {
   const [active, setActive] = useState<TabKey>("productos");
-
   return (
     <div className="relative min-h-screen bg-background text-foreground">
       <BulletsBackground />
       <div className="relative flex min-h-screen" style={{ zIndex: 1 }}>
-        <Sidebar active={active} setActive={setActive} />
+        <Sidebar active={active} setActive={setActive} onLogout={onLogout} />
         <div className="flex flex-1 flex-col">
-          <AccessBanner />
+          <AccessBanner onLogout={onLogout} />
           <TopBar active={active} />
           <main className="flex-1 px-8 py-8">
             <MainPanel active={active} />
@@ -71,8 +246,7 @@ function PerfilOperativo() {
   );
 }
 
-/* ---------- Access banner ---------- */
-function AccessBanner() {
+function AccessBanner({ onLogout }: { onLogout: () => void }) {
   return (
     <div className="flex items-center justify-between border-b border-[color:var(--amber)]/25 bg-[color:var(--amber)]/[0.06] px-8 py-2 font-mono-tech text-[10px] uppercase tracking-[0.2em]">
       <div className="flex items-center gap-3 text-amber">
@@ -80,16 +254,22 @@ function AccessBanner() {
         <span>Estado:</span>
         <span className="text-amber/90">Acceso Restringido · Personal Autorizado</span>
       </div>
-      <div className="flex items-center gap-3 text-muted-foreground">
+      <div className="flex items-center gap-4 text-muted-foreground">
         <span className="hidden md:inline">SESSION · A-1042</span>
         <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--amber)] shadow-[0_0_8px_var(--amber)]" />
+        <button
+          onClick={onLogout}
+          className="inline-flex items-center gap-1.5 border border-[color:var(--amber)]/30 px-2 py-0.5 uppercase tracking-widest text-amber/80 transition hover:border-[color:var(--amber)] hover:text-amber"
+        >
+          <LogOut className="h-3 w-3" />
+          Salir
+        </button>
       </div>
     </div>
   );
 }
 
-/* ---------- Sidebar ---------- */
-function Sidebar({ active, setActive }: { active: TabKey; setActive: (k: TabKey) => void }) {
+function Sidebar({ active, setActive, onLogout }: { active: TabKey; setActive: (k: TabKey) => void; onLogout: () => void }) {
   return (
     <aside className="sticky top-0 flex h-screen w-[240px] flex-col border-r border-[color:var(--amber)]/20 bg-black/70 backdrop-blur">
       <div className="flex h-16 items-center gap-3 border-b border-[color:var(--amber)]/20 px-5">
@@ -105,9 +285,7 @@ function Sidebar({ active, setActive }: { active: TabKey; setActive: (k: TabKey)
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <div className="px-2 pb-2 font-mono-tech text-[9px] uppercase tracking-widest text-amber/70">
-          Módulos
-        </div>
+        <div className="px-2 pb-2 font-mono-tech text-[9px] uppercase tracking-widest text-amber/70">Módulos</div>
         <ul className="space-y-1">
           {TABS.map((t) => {
             const isActive = t.key === active;
@@ -133,7 +311,7 @@ function Sidebar({ active, setActive }: { active: TabKey; setActive: (k: TabKey)
         </ul>
       </nav>
 
-      <div className="border-t border-[color:var(--amber)]/20 p-4">
+      <div className="space-y-2 border-t border-[color:var(--amber)]/20 p-4">
         <Link
           to="/"
           className="flex items-center gap-2 font-mono-tech text-[10px] uppercase tracking-wider text-muted-foreground transition hover:text-amber"
@@ -141,12 +319,18 @@ function Sidebar({ active, setActive }: { active: TabKey; setActive: (k: TabKey)
           <ArrowLeft className="h-3.5 w-3.5" />
           Volver al sitio
         </Link>
+        <button
+          onClick={onLogout}
+          className="flex w-full items-center gap-2 font-mono-tech text-[10px] uppercase tracking-wider text-muted-foreground transition hover:text-amber"
+        >
+          <LogOut className="h-3.5 w-3.5" />
+          Cerrar sesión
+        </button>
       </div>
     </aside>
   );
 }
 
-/* ---------- Top bar ---------- */
 function TopBar({ active }: { active: TabKey }) {
   const label = TABS.find((t) => t.key === active)?.label ?? "";
   return (
@@ -155,9 +339,7 @@ function TopBar({ active }: { active: TabKey }) {
         <div className="font-mono-tech text-[10px] uppercase tracking-[0.25em] text-amber/80">
           MÓDULO / {label}
         </div>
-        <h1 className="mt-1 font-display text-2xl font-bold uppercase tracking-wide text-foreground">
-          {label}
-        </h1>
+        <h1 className="mt-1 font-display text-2xl font-bold uppercase tracking-wide text-foreground">{label}</h1>
       </div>
       <div className="flex items-center gap-3 font-mono-tech text-[10px] text-muted-foreground">
         <ShieldCheck className="h-4 w-4 text-amber" />
@@ -167,25 +349,16 @@ function TopBar({ active }: { active: TabKey }) {
   );
 }
 
-/* ---------- Main panel ---------- */
 function MainPanel({ active }: { active: TabKey }) {
   switch (active) {
-    case "productos":
-      return <ProductosPanel />;
-    case "inventario":
-      return <InventarioPanel />;
-    case "categorias":
-      return <CategoriasPanel />;
-    case "pedidos":
-      return <PedidosPanel />;
-    case "clientes":
-      return <ClientesPanel />;
-    case "ofertas":
-      return <OfertasPanel />;
-    case "seo":
-      return <SeoPanel />;
-    case "configuracion":
-      return <ConfigPanel />;
+    case "productos": return <ProductosPanel />;
+    case "inventario": return <InventarioPanel />;
+    case "categorias": return <CategoriasPanel />;
+    case "pedidos": return <PedidosPanel />;
+    case "clientes": return <ClientesPanel />;
+    case "ofertas": return <OfertasPanel />;
+    case "seo": return <SeoPanel />;
+    case "configuracion": return <ConfigPanel />;
   }
 }
 
@@ -239,10 +412,19 @@ function ActionBtn({
 function DataTable({
   headers,
   rows,
+  empty,
 }: {
   headers: string[];
   rows: (string | React.ReactNode)[][];
+  empty?: React.ReactNode;
 }) {
+  if (rows.length === 0 && empty) {
+    return (
+      <div className="border border-dashed border-[color:var(--amber)]/25 bg-black/40 p-12 text-center backdrop-blur">
+        {empty}
+      </div>
+    );
+  }
   return (
     <div className="overflow-hidden border border-[color:var(--amber)]/25 bg-black/40 backdrop-blur">
       <table className="w-full font-mono-tech text-[11px]">
@@ -284,15 +466,25 @@ function StatusPill({ tone, children }: { tone: "ok" | "warn" | "muted"; childre
   );
 }
 
+function EmptyState({ title, subtitle }: { title: string; subtitle: string }) {
+  return (
+    <div className="flex flex-col items-center gap-3 font-mono-tech">
+      <Inbox className="h-8 w-8 text-amber/60" strokeWidth={1.2} />
+      <div className="text-[12px] uppercase tracking-widest text-foreground">{title}</div>
+      <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{subtitle}</div>
+    </div>
+  );
+}
+
 /* ---------- Panels ---------- */
 function ProductosPanel() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-4">
-        <MetricCard label="SKUs Activos" value="42" delta="+3 esta semana" icon={Package} />
-        <MetricCard label="Equipos Despachados" value="187" delta="MTD · +12%" icon={TrendingUp} />
-        <MetricCard label="Trámites Pendientes" value="09" delta="Prom. 3.2 días" icon={Clock} />
-        <MetricCard label="Stock Crítico" value="04" delta="Reposición requerida" icon={Activity} />
+        <MetricCard label="SKUs Activos" value={String(PRODUCTS.length).padStart(2, "0")} delta="Catálogo inicial" icon={Package} />
+        <MetricCard label="Equipos Despachados" value="00" delta="Sin ventas registradas" icon={TrendingUp} />
+        <MetricCard label="Trámites Pendientes" value="00" delta="Bandeja limpia" icon={Clock} />
+        <MetricCard label="Stock Crítico" value="00" delta="Todo abastecido" icon={Activity} />
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -306,15 +498,17 @@ function ProductosPanel() {
       </div>
 
       <DataTable
-        headers={["SKU", "Modelo", "Categoría", "Calibre", "Stock", "Estado", "Acciones"]}
-        rows={[
-          ["TRM-1024", "Compact D-9", "Defensa Personal", "9×19 P.A.K.", "14", <StatusPill tone="ok">Disponible</StatusPill>, <RowActions />],
-          ["TRM-2014", "Operator X", "Táctico", "9×19 P.A.K.", "06", <StatusPill tone="warn">Bajo</StatusPill>, <RowActions />],
-          ["TRV-357", "Sentinel R", "Defensa Personal", ".357 T", "02", <StatusPill tone="warn">Bajo</StatusPill>, <RowActions />],
-          ["TRM-980X", "Ranger L", "Tiro Deportivo", "9×19 P.A.K.", "00", <StatusPill tone="muted">Agotado</StatusPill>, <RowActions />],
-          ["TRM-050C", "Covert C", "Encubierto", ".380 T", "09", <StatusPill tone="ok">Disponible</StatusPill>, <RowActions />],
-          ["TRM-311T", "Trainer P", "Entrenamiento", "9×19 P.A.K.", "22", <StatusPill tone="ok">Disponible</StatusPill>, <RowActions />],
-        ]}
+        headers={["SKU", "Modelo", "Calibre", "Acción", "Capacidad", "Stock", "Estado", "Acciones"]}
+        rows={PRODUCTS.map((p) => [
+          p.code,
+          <span className="text-foreground">{p.name}</span>,
+          p.caliber,
+          p.specs.action,
+          p.specs.capacity,
+          "00",
+          <StatusPill tone="warn">Sin stock</StatusPill>,
+          <RowActions />,
+        ])}
       />
     </div>
   );
@@ -334,9 +528,9 @@ function InventarioPanel() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-3">
-        <MetricCard label="Unidades en Bodega" value="312" icon={Boxes} />
-        <MetricCard label="Series Registradas" value="298" delta="94.2% trazadas" icon={ShieldCheck} />
-        <MetricCard label="Importaciones YTD" value="07" delta="Últ. lote · 2026-05-18" icon={Activity} />
+        <MetricCard label="Unidades en Bodega" value="00" delta="Sin lotes registrados" icon={Boxes} />
+        <MetricCard label="Series Registradas" value="00" delta="0% trazadas" icon={ShieldCheck} />
+        <MetricCard label="Importaciones YTD" value="00" delta="Sin manifiestos" icon={Activity} />
       </div>
 
       <div className="flex justify-between">
@@ -348,23 +542,24 @@ function InventarioPanel() {
 
       <DataTable
         headers={["Serial", "SKU", "Lote", "Ingreso", "Manifiesto", "Estado"]}
-        rows={[
-          ["PT-9M-000841", "TRM-1024", "L-24-08", "2026-06-01", "MAN-0451", <StatusPill tone="ok">En Bodega</StatusPill>],
-          ["PT-9M-000842", "TRM-1024", "L-24-08", "2026-06-01", "MAN-0451", <StatusPill tone="warn">Reservado</StatusPill>],
-          ["PT-357-000112", "TRV-357", "L-24-07", "2026-05-22", "MAN-0442", <StatusPill tone="ok">En Bodega</StatusPill>],
-          ["PT-9M-000701", "TRM-2014", "L-24-06", "2026-05-04", "MAN-0431", <StatusPill tone="muted">Despachado</StatusPill>],
-        ]}
+        rows={[]}
+        empty={<EmptyState title="Sin lotes registrados" subtitle="Registra tu primera importación para iniciar la bitácora" />}
       />
     </div>
   );
 }
 
 function CategoriasPanel() {
+  const counts = {
+    defensa: PRODUCTS.filter((p) => p.intents.includes("defensa")).length,
+    deportivo: PRODUCTS.filter((p) => p.intents.includes("deportivo")).length,
+    tactico: PRODUCTS.filter((p) => p.intents.includes("tactico")).length,
+  };
   const cats = [
-    { name: "Defensa Personal Civil", items: 18, code: "CAT-01" },
-    { name: "Tiro Deportivo", items: 9, code: "CAT-02" },
-    { name: "Seguridad Privada", items: 11, code: "CAT-03" },
-    { name: "Entrenamiento Táctico", items: 4, code: "CAT-04" },
+    { name: "Defensa Personal Civil", items: counts.defensa, code: "CAT-01" },
+    { name: "Tiro Deportivo", items: counts.deportivo, code: "CAT-02" },
+    { name: "Entrenamiento Táctico", items: counts.tactico, code: "CAT-03" },
+    { name: "Accesorios & Dotación", items: 0, code: "CAT-04" },
   ];
   return (
     <div className="space-y-6">
@@ -399,19 +594,15 @@ function PedidosPanel() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-4">
-        <MetricCard label="Activos WhatsApp" value="12" icon={ShoppingCart} />
-        <MetricCard label="En Verificación" value="05" icon={ShieldCheck} />
-        <MetricCard label="Aprobados / Semana" value="18" icon={TrendingUp} />
-        <MetricCard label="Ticket Promedio" value="—" delta="Consultar backend" icon={Activity} />
+        <MetricCard label="Activos WhatsApp" value="00" icon={ShoppingCart} />
+        <MetricCard label="En Verificación" value="00" icon={ShieldCheck} />
+        <MetricCard label="Aprobados / Semana" value="00" icon={TrendingUp} />
+        <MetricCard label="Ticket Promedio" value="—" delta="Sin datos aún" icon={Activity} />
       </div>
       <DataTable
         headers={["Pedido", "Cliente", "SKU", "Canal", "Estado", "Actualizado"]}
-        rows={[
-          ["#PT-2109", "J. Restrepo", "TRM-1024", "WhatsApp", <StatusPill tone="warn">Verificando</StatusPill>, "hace 12m"],
-          ["#PT-2108", "L. Cárdenas", "TRV-357", "WhatsApp", <StatusPill tone="ok">Aprobado</StatusPill>, "hace 1h"],
-          ["#PT-2107", "M. Gómez", "TRM-2014", "Instagram", <StatusPill tone="warn">Pendiente Carnet</StatusPill>, "hace 3h"],
-          ["#PT-2106", "S. Ortiz", "TRM-050C", "WhatsApp", <StatusPill tone="muted">Despachado</StatusPill>, "ayer"],
-        ]}
+        rows={[]}
+        empty={<EmptyState title="Sin pedidos aún" subtitle="Los pedidos entrantes por WhatsApp aparecerán aquí" />}
       />
     </div>
   );
@@ -428,12 +619,8 @@ function ClientesPanel() {
       </div>
       <DataTable
         headers={["ID", "Nombre", "Cédula", "Carnet Porte", "Perfil", "Estado"]}
-        rows={[
-          ["USR-0421", "J. Restrepo", "1.023.***.412", "CP-889-24", "Defensa Civil", <StatusPill tone="ok">Verificado</StatusPill>],
-          ["USR-0420", "L. Cárdenas", "80.***.221", "CP-762-24", "Seguridad Privada", <StatusPill tone="ok">Verificado</StatusPill>],
-          ["USR-0419", "M. Gómez", "43.***.008", "En trámite", "Tiro Deportivo", <StatusPill tone="warn">Pendiente</StatusPill>],
-          ["USR-0418", "S. Ortiz", "1.140.***.700", "CP-701-24", "Defensa Civil", <StatusPill tone="ok">Verificado</StatusPill>],
-        ]}
+        rows={[]}
+        empty={<EmptyState title="Sin clientes registrados" subtitle="Comienza registrando el primer perfil verificado" />}
       />
     </div>
   );
@@ -448,26 +635,8 @@ function OfertasPanel() {
         </div>
         <ActionBtn primary icon={Plus}>Crear Oferta</ActionBtn>
       </div>
-      <div className="grid gap-4 md:grid-cols-3">
-        {[
-          { code: "OFR-01", name: "Kit Defensa Civil", items: "Pistola · Spray OC · Curso", status: "Activa" as const },
-          { code: "OFR-02", name: "Set Tiro Deportivo", items: "Red dot · Munición · Funda", status: "Activa" as const },
-          { code: "OFR-03", name: "Dotación Escolta", items: "Chaleco · Radio · Funda III", status: "Borrador" as const },
-        ].map((o) => (
-          <div key={o.code} className="border border-[color:var(--amber)]/25 bg-black/50 p-5 backdrop-blur">
-            <div className="flex justify-between font-mono-tech text-[10px] text-amber/80">
-              <span>{o.code}</span>
-              <StatusPill tone={o.status === "Activa" ? "ok" : "muted"}>{o.status}</StatusPill>
-            </div>
-            <h3 className="mt-3 font-display text-base font-bold uppercase tracking-wide">{o.name}</h3>
-            <p className="mt-2 font-mono-tech text-[11px] text-muted-foreground">{o.items}</p>
-            <div className="mt-5 flex gap-2 text-[10px] uppercase tracking-widest">
-              <button className="text-amber hover:underline">Editar</button>
-              <span className="text-muted-foreground/40">·</span>
-              <button className="text-muted-foreground hover:text-destructive">Pausar</button>
-            </div>
-          </div>
-        ))}
+      <div className="border border-dashed border-[color:var(--amber)]/25 bg-black/40 p-12 text-center backdrop-blur">
+        <EmptyState title="Sin ofertas activas" subtitle="Crea tu primer bundle táctico o combo promocional" />
       </div>
     </div>
   );
@@ -477,14 +646,12 @@ function SeoPanel() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-3">
-        <MetricCard label="Páginas Indexadas" value="14" delta="Google · CO" icon={Search} />
-        <MetricCard label="Keywords Top 10" value="08" delta="+2 vs. mes anterior" icon={TrendingUp} />
-        <MetricCard label="CTR Promedio" value="4.2%" delta="Últ. 28 días" icon={Activity} />
+        <MetricCard label="Páginas Indexadas" value="00" delta="Pendiente indexación" icon={Search} />
+        <MetricCard label="Keywords Top 10" value="00" delta="Sin rastreo aún" icon={TrendingUp} />
+        <MetricCard label="CTR Promedio" value="—" delta="Sin datos" icon={Activity} />
       </div>
       <div className="space-y-4">
-        <div className="font-mono-tech text-[10px] uppercase tracking-widest text-amber/80">
-          Meta Tags · Home
-        </div>
+        <div className="font-mono-tech text-[10px] uppercase tracking-widest text-amber/80">Meta Tags · Home</div>
         <div className="grid gap-4 md:grid-cols-2">
           <SeoField label="Meta Title" value="Punto Táctico — Armas Traumáticas Legales en Colombia" />
           <SeoField label="Meta Description" value="Venta legal y responsable de armas traumáticas y equipo táctico premium. Asesoría certificada Indumil." />
@@ -523,15 +690,15 @@ function ConfigPanel() {
         <ul className="mt-4 space-y-3 font-mono-tech text-[11px]">
           <li className="flex justify-between border-b border-[color:var(--amber)]/10 pb-2">
             <span className="text-muted-foreground">WhatsApp Business API</span>
-            <StatusPill tone="ok">Conectado</StatusPill>
+            <StatusPill tone="muted">Sin conectar</StatusPill>
           </li>
           <li className="flex justify-between border-b border-[color:var(--amber)]/10 pb-2">
             <span className="text-muted-foreground">Instagram Graph</span>
-            <StatusPill tone="warn">Reautenticar</StatusPill>
+            <StatusPill tone="muted">Sin conectar</StatusPill>
           </li>
           <li className="flex justify-between">
             <span className="text-muted-foreground">Indumil · Trazabilidad</span>
-            <StatusPill tone="ok">Activo</StatusPill>
+            <StatusPill tone="muted">Sin conectar</StatusPill>
           </li>
         </ul>
       </div>
