@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-// Link retained for logo home navigation
+
 
 
 export function Navbar() {
