@@ -1,12 +1,19 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import gunCompact from "@/assets/gun-compact.jpg";
-import gunFullsize from "@/assets/gun-fullsize.jpg";
-import gunRevolver from "@/assets/gun-revolver.jpg";
+import { X } from "lucide-react";
+import ekolViper from "@/assets/products/ekol-viper-3.jpg.asset.json";
+import retayS2022 from "@/assets/products/retay-s2022.jpg.asset.json";
+import blowF92 from "@/assets/products/blow-f92.jpg.asset.json";
+import retayG17 from "@/assets/products/retay-g17.jpg.asset.json";
+import ekolNig211 from "@/assets/products/ekol-nig-211.jpg.asset.json";
+import ekolFiratMagnum from "@/assets/products/ekol-firat-magnum.jpg.asset.json";
+import blowTr92d from "@/assets/products/blow-tr92d.jpg.asset.json";
+import ekolSpecial99 from "@/assets/products/ekol-special-99.jpg.asset.json";
+import ekolFiratCompact from "@/assets/products/ekol-firat-compact.jpg.asset.json";
 
 type Intent = "defensa" | "deportivo" | "tactico";
 
-interface Product {
+export interface Product {
   id: string;
   code: string;
   name: string;
@@ -14,120 +21,190 @@ interface Product {
   intents: Intent[];
   image: string;
   specs: {
-    weight: string;
-    barrel: string;
-    capacity: string;
-    length: string;
     action: string;
+    capacity: string;
+    barrel: string;
+    weight: string;
+    length: string;
     material: string;
   };
   status: "DISPONIBLE" | "BAJO CONSULTA" | "LISTA DE ESPERA";
+  description: string;
 }
 
 const WHATSAPP = "https://wa.me/573000000000";
 
-const PRODUCTS: Product[] = [
+export const PRODUCTS: Product[] = [
   {
-    id: "trm-1024",
-    code: "PT·001",
-    name: "TRM-1024 Compact",
-    caliber: "9x19 P.A.K.",
+    id: "ekol-viper-3",
+    code: "PT·V03",
+    name: "EKOL VIPER 3.0",
+    caliber: "9 mm P.A.",
     intents: ["defensa"],
-    image: gunCompact,
+    image: ekolViper.url,
     specs: {
-      weight: "824 g",
-      barrel: "114 mm",
+      action: "Doble acción · Revólver",
+      capacity: "6 tiros",
+      barrel: '3" (76 mm)',
+      weight: "730 g",
+      length: "20 cm",
+      material: "Aleación de acero / Zamak",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Revólver traumático de doble acción, robusto y confiable. Diseño clásico para portadores civiles que priorizan simplicidad mecánica y disuasión inmediata.",
+  },
+  {
+    id: "retay-s2022",
+    code: "PT·S22",
+    name: "RETAY S2022",
+    caliber: "9 mm P.A.",
+    intents: ["defensa", "deportivo"],
+    image: retayS2022.url,
+    specs: {
+      action: "Semi-automática",
       capacity: "15+1",
-      length: "198 mm",
-      action: "Semi-auto DA/SA",
-      material: "Polímero / Acero nitrurado",
+      barrel: '4.5" (114 mm)',
+      weight: "830 g",
+      length: "20 cm",
+      material: "Aleación / Polímero",
     },
     status: "DISPONIBLE",
+    description:
+      "Plataforma semi-automática balanceada. Alta capacidad, ergonomía moderna y disparo consistente para defensa civil y práctica en polígono.",
   },
   {
-    id: "trm-2014",
-    code: "PT·014",
-    name: "TRM-2014 Operator",
-    caliber: "9x22 P.A.K.",
-    intents: ["tactico", "deportivo"],
-    image: gunFullsize,
-    specs: {
-      weight: "1042 g",
-      barrel: "138 mm",
-      capacity: "17+1",
-      length: "221 mm",
-      action: "Striker-fired",
-      material: "Aluminio 7075 / Polímero",
-    },
-    status: "BAJO CONSULTA",
-  },
-  {
-    id: "trv-357",
-    code: "PT·037",
-    name: "TRV-357 Sentinel",
-    caliber: ".38 CTS Traumático",
+    id: "blow-f92",
+    code: "PT·F92",
+    name: "BLOW F 92",
+    caliber: "9 mm P.A.",
     intents: ["defensa", "tactico"],
-    image: gunRevolver,
+    image: blowF92.url,
     specs: {
-      weight: "1120 g",
-      barrel: "102 mm",
-      capacity: "6",
-      length: "232 mm",
-      action: "Doble acción",
-      material: "Acero forjado nitrurado",
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: '4.5" (114 mm)',
+      weight: "950 g",
+      length: "21 cm",
+      material: "Aleación forjada",
     },
     status: "DISPONIBLE",
+    description:
+      "Chasis metálico de servicio pesado, inspirado en la plataforma 92. Estabilidad de disparo y sensación operativa premium.",
   },
   {
-    id: "trm-980x",
-    code: "PT·080",
-    name: "TRM-980X Ranger",
-    caliber: "9x19 P.A.K.",
-    intents: ["deportivo"],
-    image: gunFullsize,
+    id: "retay-g17",
+    code: "PT·G17",
+    name: "RETAY G17",
+    caliber: "9 mm P.A.",
+    intents: ["deportivo", "tactico"],
+    image: retayG17.url,
     specs: {
-      weight: "890 g",
-      barrel: "125 mm",
+      action: "Semi-automática · Striker",
       capacity: "17+1",
-      length: "210 mm",
-      action: "Semi-auto SA",
-      material: "Polímero reforzado",
-    },
-    status: "LISTA DE ESPERA",
-  },
-  {
-    id: "trm-050c",
-    code: "PT·050",
-    name: "TRM-050C Covert",
-    caliber: "9x19 P.A.K.",
-    intents: ["defensa"],
-    image: gunCompact,
-    specs: {
-      weight: "702 g",
-      barrel: "88 mm",
-      capacity: "12+1",
-      length: "168 mm",
-      action: "Striker-fired",
-      material: "Polímero / Acero",
-    },
-    status: "DISPONIBLE",
-  },
-  {
-    id: "trm-311t",
-    code: "PT·311",
-    name: "TRM-311T Trainer",
-    caliber: "9x22 P.A.K.",
-    intents: ["tactico"],
-    image: gunFullsize,
-    specs: {
-      weight: "965 g",
-      barrel: "120 mm",
-      capacity: "17+1",
-      length: "205 mm",
-      action: "Semi-auto DA/SA",
+      barrel: '4.49" (114 mm)',
+      weight: "830 g",
+      length: "20 cm",
       material: "Polímero / Acero nitrurado",
     },
-    status: "BAJO CONSULTA",
+    status: "DISPONIBLE",
+    description:
+      "Referencia striker-fired de alta capacidad. Ideal para entrenamiento táctico y disciplinas de tiro rápido.",
+  },
+  {
+    id: "ekol-nig-211",
+    code: "PT·N21",
+    name: "EKOL NIG 211",
+    caliber: "9 mm P.A.",
+    intents: ["defensa"],
+    image: ekolNig211.url,
+    specs: {
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: '3.9" (99 mm)',
+      weight: "780 g",
+      length: "17.5 cm",
+      material: "Aleación / Polímero",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Compacta 1911-style para porte encubierto. Excelente relación tamaño/capacidad para EDC civil.",
+  },
+  {
+    id: "blow-tr92d",
+    code: "PT·T92",
+    name: "BLOW TR92 D",
+    caliber: "9 mm P.A.",
+    intents: ["defensa"],
+    image: blowTr92d.url,
+    specs: {
+      action: "Semi-automática DA/SA",
+      capacity: "15+1",
+      barrel: '4.1" (104 mm)',
+      weight: "720 g",
+      length: "19 cm",
+      material: "Aleación ligera",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Ligera y ágil. Manejo instintivo con capacidad de servicio; una plataforma equilibrada para portador civil experimentado.",
+  },
+  {
+    id: "ekol-firat-magnum",
+    code: "PT·FM9",
+    name: "EKOL FIRAT MAGNUM",
+    caliber: "9 mm P.A.",
+    intents: ["tactico", "deportivo"],
+    image: ekolFiratMagnum.url,
+    specs: {
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: '4.5" (114 mm)',
+      weight: "930 g",
+      length: "21 cm",
+      material: "Acero / Aleación",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Versión reforzada de la línea Firat. Masa aumentada para reducción de retroceso y desempeño premium en polígono.",
+  },
+  {
+    id: "ekol-special-99",
+    code: "PT·S99",
+    name: "EKOL SPECIAL 99 REV-II",
+    caliber: "9 mm P.A.",
+    intents: ["defensa", "deportivo"],
+    image: ekolSpecial99.url,
+    specs: {
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: '4.5" (114 mm)',
+      weight: "830 g",
+      length: "20 cm",
+      material: "Aleación / Polímero",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Modelo insignia de la línea Special. Acabado premium y ergonomía refinada para uso mixto defensivo/deportivo.",
+  },
+  {
+    id: "ekol-firat-compact",
+    code: "PT·FC9",
+    name: "EKOL FIRAT COMPACT",
+    caliber: "9 mm P.A.",
+    intents: ["defensa"],
+    image: ekolFiratCompact.url,
+    specs: {
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: '3.9" (99 mm)',
+      weight: "780 g",
+      length: "17.5 cm",
+      material: "Aleación / Polímero",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Versión compacta de la Firat. Portabilidad óptima manteniendo capacidad de servicio: ideal EDC civil.",
   },
 ];
 
@@ -140,6 +217,7 @@ const INTENTS: { id: Intent | "all"; label: string; sub: string }[] = [
 
 export function Catalog() {
   const [intent, setIntent] = useState<Intent | "all">("all");
+  const [detail, setDetail] = useState<Product | null>(null);
 
   const filtered = useMemo(
     () => (intent === "all" ? PRODUCTS : PRODUCTS.filter((p) => p.intents.includes(intent))),
@@ -165,11 +243,16 @@ export function Catalog() {
             <span className="h-1.5 w-1.5 animate-hud-pulse rounded-full bg-[color:var(--amber)] shadow-[0_0_8px_var(--amber)]" />
             [SYS.INV.ONLINE]
             <span className="h-px flex-1 max-w-24 bg-[color:var(--amber)]/40" />
-            <span className="text-muted-foreground">{String(filtered.length).padStart(2, "0")} / {String(PRODUCTS.length).padStart(2, "0")}</span>
+            <span className="text-muted-foreground">
+              {String(filtered.length).padStart(2, "0")} / {String(PRODUCTS.length).padStart(2, "0")}
+            </span>
           </div>
 
           <div className="mt-4 grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
-            <h2 className="font-black uppercase leading-[0.9] tracking-tight text-foreground" style={{ fontSize: "clamp(2.25rem, 6vw, 4.5rem)" }}>
+            <h2
+              className="font-black uppercase leading-[0.9] tracking-tight text-foreground"
+              style={{ fontSize: "clamp(2.25rem, 6vw, 4.5rem)" }}
+            >
               Inventario<br />
               <span
                 style={{
@@ -203,7 +286,9 @@ export function Catalog() {
                   <div className={`font-mono-tech text-[9px] ${active ? "text-amber" : "text-muted-foreground"}`}>
                     [{it.sub}]
                   </div>
-                  <div className={`mt-1 text-sm font-semibold uppercase tracking-wide md:text-base ${active ? "text-foreground" : "text-foreground/70"}`}>
+                  <div
+                    className={`mt-1 text-sm font-semibold uppercase tracking-wide md:text-base ${active ? "text-foreground" : "text-foreground/70"}`}
+                  >
                     {it.label}
                   </div>
                   {active && (
@@ -222,7 +307,7 @@ export function Catalog() {
         <motion.div layout className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {filtered.map((p, i) => (
-              <ProductCard key={p.id} product={p} index={i} />
+              <ProductCard key={p.id} product={p} index={i} onOpen={() => setDetail(p)} />
             ))}
           </AnimatePresence>
         </motion.div>
@@ -236,16 +321,23 @@ export function Catalog() {
           <div>PRECIOS BAJO CONSULTA · ASIGNACIÓN SUJETA A PERFIL</div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {detail && <ProductDetail product={detail} onClose={() => setDetail(null)} />}
+      </AnimatePresence>
     </section>
   );
 }
 
-function ProductCard({ product, index }: { product: Product; index: number }) {
-  const [expanded, setExpanded] = useState(false);
-  const waLink = `${WHATSAPP}?text=${encodeURIComponent(
-    `Hola Punto Táctico, quiero consultar disponibilidad de ${product.name} (${product.code}).`,
-  )}`;
-
+function ProductCard({
+  product,
+  index,
+  onOpen,
+}: {
+  product: Product;
+  index: number;
+  onOpen: () => void;
+}) {
   return (
     <motion.article
       layout
@@ -253,26 +345,27 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      className="group relative border border-[color:var(--amber)]/10 bg-[#111] transition-all duration-300 hover:border-[color:var(--amber)]/70 hover:shadow-[0_0_40px_-10px_rgba(245,166,35,0.4)]"
+      className="group relative cursor-pointer border border-[color:var(--amber)]/10 bg-[#111] transition-all duration-300 hover:border-[color:var(--amber)]/70 hover:shadow-[0_0_40px_-10px_rgba(245,166,35,0.4)]"
+      onClick={onOpen}
     >
-      {/* Corner ticks */}
       <span className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l border-t border-[color:var(--amber)]/70" />
       <span className="pointer-events-none absolute right-0 top-0 h-3 w-3 border-r border-t border-[color:var(--amber)]/70" />
       <span className="pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b border-l border-[color:var(--amber)]/70" />
       <span className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[color:var(--amber)]/70" />
 
-      {/* Top meta bar */}
       <div className="flex items-center justify-between border-b border-[color:var(--amber)]/10 px-3 py-2 font-mono-tech text-[9px]">
         <span className="text-amber">{product.code}</span>
-        <span className={`flex items-center gap-1.5 ${product.status === "DISPONIBLE" ? "text-amber" : "text-muted-foreground"}`}>
-          <span className={`h-1.5 w-1.5 rounded-full ${product.status === "DISPONIBLE" ? "bg-[color:var(--amber)] shadow-[0_0_6px_var(--amber)] animate-hud-pulse" : "bg-muted-foreground/50"}`} />
+        <span
+          className={`flex items-center gap-1.5 ${product.status === "DISPONIBLE" ? "text-amber" : "text-muted-foreground"}`}
+        >
+          <span
+            className={`h-1.5 w-1.5 rounded-full ${product.status === "DISPONIBLE" ? "bg-[color:var(--amber)] shadow-[0_0_6px_var(--amber)] animate-hud-pulse" : "bg-muted-foreground/50"}`}
+          />
           {product.status}
         </span>
       </div>
 
-      {/* Image */}
       <div className="relative aspect-[16/10] overflow-hidden bg-[#1A1A1A]">
-        {/* Blueprint grid */}
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.08]"
           style={{
@@ -285,12 +378,9 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           src={product.image}
           alt={`${product.name} — ${product.caliber}`}
           loading="lazy"
-          width={1280}
-          height={768}
-          className="absolute inset-0 h-full w-full object-cover mix-blend-lighten transition-transform duration-700 group-hover:scale-[1.03]"
+          className="absolute inset-0 h-full w-full object-contain p-4 transition-transform duration-700 group-hover:scale-[1.04]"
         />
 
-        {/* Measurement line */}
         <div className="pointer-events-none absolute left-3 right-3 top-3 flex items-center gap-2 opacity-60">
           <div className="h-1.5 w-px bg-[color:var(--amber)]/70" />
           <div className="h-px flex-1 bg-[color:var(--amber)]/40" />
@@ -299,21 +389,20 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           <div className="h-1.5 w-px bg-[color:var(--amber)]/70" />
         </div>
 
-        {/* Blueprint overlay on hover */}
+        {/* Blueprint hover overlay with specs */}
         <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/80 to-black/30 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <div className="font-mono-tech text-[9px] text-amber/80">[SPECS · CLASIFICADO]</div>
           <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 font-mono-tech text-[10px]">
-            <SpecRow k="MASS" v={product.specs.weight} />
-            <SpecRow k="BBL" v={product.specs.barrel} />
-            <SpecRow k="CAP" v={product.specs.capacity} />
-            <SpecRow k="LEN" v={product.specs.length} />
             <SpecRow k="ACT" v={product.specs.action} />
+            <SpecRow k="CAP" v={product.specs.capacity} />
+            <SpecRow k="BBL" v={product.specs.barrel} />
+            <SpecRow k="MASS" v={product.specs.weight} />
+            <SpecRow k="LEN" v={product.specs.length} />
             <SpecRow k="MAT" v={product.specs.material} />
           </div>
         </div>
       </div>
 
-      {/* Body */}
       <div className="p-4">
         <div className="flex items-baseline justify-between gap-3">
           <h3 className="text-base font-bold uppercase tracking-wide text-foreground md:text-lg">{product.name}</h3>
@@ -321,42 +410,17 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         </div>
         <div className="mt-1 flex items-center justify-between">
           <span className="font-mono-tech text-[10px] text-amber">{product.caliber}</span>
-          <span className="font-mono-tech text-[9px] text-muted-foreground">
-            PRECIO · <button onClick={() => setExpanded((v) => !v)} className="underline underline-offset-2 hover:text-amber">consultar</button>
-          </span>
+          <span className="font-mono-tech text-[9px] text-muted-foreground">{product.specs.capacity}</span>
         </div>
 
-        <AnimatePresence initial={false}>
-          {expanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="overflow-hidden"
-            >
-              <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 border-t border-[color:var(--amber)]/10 pt-3 font-mono-tech text-[10px]">
-                <SpecRow k="MASS" v={product.specs.weight} />
-                <SpecRow k="BBL" v={product.specs.barrel} />
-                <SpecRow k="CAP" v={product.specs.capacity} />
-                <SpecRow k="ACT" v={product.specs.action} />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <a
-          href={waLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => setExpanded(true)}
-          className="mt-4 flex items-center justify-between border border-[color:var(--amber)]/50 px-3 py-2.5 font-mono-tech text-[10px] text-amber transition-all hover:bg-[color:var(--amber)] hover:text-primary-foreground hover:shadow-[0_0_24px_-4px_var(--amber)]"
+        <div
+          className="mt-4 flex items-center justify-between border border-[color:var(--amber)]/50 px-3 py-2.5 font-mono-tech text-[10px] text-amber transition-all group-hover:bg-[color:var(--amber)] group-hover:text-primary-foreground group-hover:shadow-[0_0_24px_-4px_var(--amber)]"
         >
-          <span>{product.status === "LISTA DE ESPERA" ? "Solicitar Asignación" : "Consultar Disponibilidad"}</span>
+          <span>Ver Ficha Técnica</span>
           <svg width="12" height="10" viewBox="0 0 14 10" fill="none">
             <path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="currentColor" strokeWidth="1.2" />
           </svg>
-        </a>
+        </div>
       </div>
     </motion.article>
   );
@@ -366,7 +430,168 @@ function SpecRow({ k, v }: { k: string; v: string }) {
   return (
     <div className="flex items-center justify-between gap-2 border-b border-[color:var(--amber)]/10 pb-1">
       <span className="text-muted-foreground">{k}</span>
-      <span className="text-foreground/90">{v}</span>
+      <span className="truncate text-right text-foreground/90">{v}</span>
     </div>
+  );
+}
+
+/* ---------- Detail modal ---------- */
+function ProductDetail({ product, onClose }: { product: Product; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  const waLink = `${WHATSAPP}?text=${encodeURIComponent(
+    `Hola Punto Táctico, quiero consultar disponibilidad de ${product.name} (${product.code}).`,
+  )}`;
+
+  const specRows: [string, string][] = [
+    ["Acción", product.specs.action],
+    ["Capacidad", product.specs.capacity],
+    ["Cañón", product.specs.barrel],
+    ["Peso", product.specs.weight],
+    ["Longitud total", product.specs.length],
+    ["Material", product.specs.material],
+    ["Calibre", product.caliber],
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 10, scale: 0.98 }}
+        transition={{ duration: 0.25 }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative grid max-h-[92vh] w-full max-w-6xl grid-cols-1 overflow-hidden border border-[color:var(--amber)]/40 bg-[#0A0A0A] shadow-[0_0_80px_-10px_rgba(245,166,35,0.35)] md:grid-cols-[1.15fr_1fr]"
+      >
+        <span className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l border-t border-[color:var(--amber)]" />
+        <span className="pointer-events-none absolute right-0 top-0 h-4 w-4 border-r border-t border-[color:var(--amber)]" />
+        <span className="pointer-events-none absolute bottom-0 left-0 h-4 w-4 border-b border-l border-[color:var(--amber)]" />
+        <span className="pointer-events-none absolute bottom-0 right-0 h-4 w-4 border-b border-r border-[color:var(--amber)]" />
+
+        <button
+          onClick={onClose}
+          className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center border border-[color:var(--amber)]/40 bg-black/60 text-amber transition-colors hover:bg-[color:var(--amber)] hover:text-primary-foreground"
+          aria-label="Cerrar"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        {/* Image side */}
+        <div className="relative flex items-center justify-center overflow-hidden bg-[#111] p-6 md:p-10">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.09]"
+            style={{
+              backgroundImage:
+                "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)",
+              backgroundSize: "28px 28px",
+            }}
+          />
+          <img
+            src={product.image}
+            alt={product.name}
+            className="relative z-10 max-h-[60vh] w-full object-contain"
+          />
+          {/* Corner measurements */}
+          <div className="pointer-events-none absolute left-4 right-4 top-4 flex items-center gap-2 opacity-70">
+            <div className="h-1.5 w-px bg-[color:var(--amber)]" />
+            <div className="h-px flex-1 bg-[color:var(--amber)]/50" />
+            <span className="font-mono-tech text-[9px] text-amber">{product.specs.length}</span>
+            <div className="h-px flex-1 bg-[color:var(--amber)]/50" />
+            <div className="h-1.5 w-px bg-[color:var(--amber)]" />
+          </div>
+        </div>
+
+        {/* Info side */}
+        <div className="relative flex max-h-[92vh] flex-col overflow-y-auto">
+          <div className="flex items-center justify-between border-b border-[color:var(--amber)]/20 px-6 py-3 font-mono-tech text-[10px]">
+            <span className="text-amber">{product.code}</span>
+            <span className="flex items-center gap-1.5 text-amber">
+              <span className="h-1.5 w-1.5 animate-hud-pulse rounded-full bg-[color:var(--amber)] shadow-[0_0_6px_var(--amber)]" />
+              {product.status}
+            </span>
+          </div>
+
+          <div className="flex-1 space-y-6 px-6 py-6 md:px-8">
+            <div>
+              <div className="font-mono-tech text-[10px] uppercase tracking-[0.25em] text-amber/80">
+                FICHA TÉCNICA · CLASIFICADA
+              </div>
+              <h3
+                className="mt-3 font-black uppercase leading-[0.95] tracking-tight text-foreground"
+                style={{ fontSize: "clamp(1.75rem, 3.2vw, 2.5rem)" }}
+              >
+                {product.name}
+              </h3>
+              <div className="mt-2 font-mono-tech text-[11px] text-amber">{product.caliber}</div>
+            </div>
+
+            <p className="text-sm leading-relaxed text-muted-foreground">{product.description}</p>
+
+            <div>
+              <div className="mb-3 font-mono-tech text-[10px] uppercase tracking-widest text-amber/80">
+                Especificaciones
+              </div>
+              <dl className="grid grid-cols-1 border border-[color:var(--amber)]/20 font-mono-tech text-[11px]">
+                {specRows.map(([k, v], i) => (
+                  <div
+                    key={k}
+                    className={`flex items-center justify-between px-4 py-2.5 ${
+                      i < specRows.length - 1 ? "border-b border-[color:var(--amber)]/10" : ""
+                    }`}
+                  >
+                    <dt className="uppercase tracking-widest text-muted-foreground">{k}</dt>
+                    <dd className="text-right text-foreground">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <div>
+              <div className="mb-2 font-mono-tech text-[10px] uppercase tracking-widest text-amber/80">
+                Perfil operativo
+              </div>
+              <div className="flex flex-wrap gap-2 font-mono-tech text-[10px]">
+                {product.intents.map((i) => (
+                  <span
+                    key={i}
+                    className="border border-[color:var(--amber)]/40 px-2.5 py-1 uppercase tracking-widest text-amber"
+                  >
+                    {i}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-[color:var(--amber)]/20 bg-black/60 p-4">
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between border border-[color:var(--amber)] bg-[color:var(--amber)]/10 px-5 py-3 font-mono-tech text-[11px] uppercase tracking-wider text-amber transition-all hover:bg-[color:var(--amber)] hover:text-primary-foreground hover:shadow-[0_0_25px_-4px_var(--amber)]"
+            >
+              <span>Consultar Disponibilidad · WhatsApp</span>
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+                <path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="currentColor" strokeWidth="1.4" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
