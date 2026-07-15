@@ -1,10 +1,18 @@
 import { Link } from "@tanstack/react-router";
-
-
+import { motion, useScroll, useSpring } from "motion/react";
 
 export function Navbar() {
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-[color:var(--amber)]/20 bg-black/70 backdrop-blur-md">
+      {/* Scroll progress — tactical amber tracer */}
+      <motion.div
+        aria-hidden
+        className="absolute inset-x-0 bottom-[-1px] h-[2px] origin-left bg-gradient-to-r from-[color:var(--amber)]/60 via-[color:var(--amber)] to-[color:var(--amber-glow)] shadow-[0_0_8px_var(--amber)]"
+        style={{ scaleX: progress }}
+      />
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-3">
           <div className="flex h-7 w-7 items-center justify-center border border-[color:var(--amber)]/70">

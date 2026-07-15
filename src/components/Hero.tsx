@@ -1,20 +1,27 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import heroGun from "@/assets/hero-gun.png";
-import heroBg from "@/assets/hero-bg.jpg.asset.json";
+import heroBg from "@/assets/hero-bg.jpg";
 
 export function Hero() {
+  const reducedMotion = useReducedMotion();
   return (
     <section className="relative flex h-[100dvh] min-h-[600px] w-full flex-col overflow-hidden bg-background pt-16">
-      {/* Background image */}
-      <div
+      {/* Topographic background — slow Ken Burns drift */}
+      <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-[-6%]"
         style={{
           zIndex: 0,
-          backgroundImage: `url(${heroBg.url})`,
+          backgroundImage: `url(${heroBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
+        animate={
+          reducedMotion
+            ? undefined
+            : { x: ["-1.5%", "1.5%", "-1.5%"], y: ["-1%", "1%", "-1%"], scale: [1, 1.04, 1] }
+        }
+        transition={{ duration: 38, repeat: Infinity, ease: "easeInOut" }}
       />
       {/* Dark overlay for depth */}
       <div

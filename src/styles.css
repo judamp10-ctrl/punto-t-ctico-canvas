@@ -117,3 +117,32 @@
 .animate-hud-pulse { animation: hud-pulse 2.4s ease-in-out infinite; }
 .animate-scanline { animation: scanline 8s linear infinite; }
 .animate-flicker { animation: flicker 6s infinite; }
+
+/* Accessibility: honor reduced motion for all decorative animation */
+@media (prefers-reduced-motion: reduce) {
+  .animate-smoke-1,
+  .animate-smoke-2,
+  .animate-hud-pulse,
+  .animate-scanline,
+  .animate-flicker {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Keyboard navigation: visible tactical focus ring */
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+button,
+[role="button"] {
+  cursor: pointer;
+}

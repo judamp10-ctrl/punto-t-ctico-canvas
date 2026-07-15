@@ -1,15 +1,15 @@
 import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X } from "lucide-react";
-import ekolViper from "@/assets/products/ekol-viper-3.jpg.asset.json";
-import retayS2022 from "@/assets/products/retay-s2022.jpg.asset.json";
-import blowF92 from "@/assets/products/blow-f92.jpg.asset.json";
-import retayG17 from "@/assets/products/retay-g17.jpg.asset.json";
-import ekolNig211 from "@/assets/products/ekol-nig-211.jpg.asset.json";
-import ekolFiratMagnum from "@/assets/products/ekol-firat-magnum.jpg.asset.json";
-import blowTr92d from "@/assets/products/blow-tr92d.jpg.asset.json";
-import ekolSpecial99 from "@/assets/products/ekol-special-99.jpg.asset.json";
-import ekolFiratCompact from "@/assets/products/ekol-firat-compact.jpg.asset.json";
+import ekolViper from "@/assets/products/ekol-viper-3.jpg";
+import retayS2022 from "@/assets/products/retay-s2022.jpg";
+import blowF92 from "@/assets/products/blow-f92.jpg";
+import retayG17 from "@/assets/products/retay-g17.jpg";
+import ekolNig211 from "@/assets/products/ekol-nig-211.jpg";
+import ekolFiratMagnum from "@/assets/products/ekol-firat-magnum.jpg";
+import blowTr92d from "@/assets/products/blow-tr92d.jpg";
+import ekolSpecial99 from "@/assets/products/ekol-special-99.jpg";
+import ekolFiratCompact from "@/assets/products/ekol-firat-compact.jpg";
 
 type Intent = "defensa" | "deportivo" | "tactico";
 
@@ -41,7 +41,7 @@ export const PRODUCTS: Product[] = [
     name: "EKOL VIPER 3.0",
     caliber: "9 mm P.A.",
     intents: ["defensa"],
-    image: ekolViper.url,
+    image: ekolViper,
     specs: {
       action: "Doble acción · Revólver",
       capacity: "6 tiros",
@@ -60,7 +60,7 @@ export const PRODUCTS: Product[] = [
     name: "RETAY S2022",
     caliber: "9 mm P.A.",
     intents: ["defensa", "deportivo"],
-    image: retayS2022.url,
+    image: retayS2022,
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
@@ -79,7 +79,7 @@ export const PRODUCTS: Product[] = [
     name: "BLOW F 92",
     caliber: "9 mm P.A.",
     intents: ["defensa", "tactico"],
-    image: blowF92.url,
+    image: blowF92,
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
@@ -98,7 +98,7 @@ export const PRODUCTS: Product[] = [
     name: "RETAY G17",
     caliber: "9 mm P.A.",
     intents: ["deportivo", "tactico"],
-    image: retayG17.url,
+    image: retayG17,
     specs: {
       action: "Semi-automática · Striker",
       capacity: "17+1",
@@ -117,7 +117,7 @@ export const PRODUCTS: Product[] = [
     name: "EKOL NIG 211",
     caliber: "9 mm P.A.",
     intents: ["defensa"],
-    image: ekolNig211.url,
+    image: ekolNig211,
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
@@ -136,7 +136,7 @@ export const PRODUCTS: Product[] = [
     name: "BLOW TR92 D",
     caliber: "9 mm P.A.",
     intents: ["defensa"],
-    image: blowTr92d.url,
+    image: blowTr92d,
     specs: {
       action: "Semi-automática DA/SA",
       capacity: "15+1",
@@ -155,7 +155,7 @@ export const PRODUCTS: Product[] = [
     name: "EKOL FIRAT MAGNUM",
     caliber: "9 mm P.A.",
     intents: ["tactico", "deportivo"],
-    image: ekolFiratMagnum.url,
+    image: ekolFiratMagnum,
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
@@ -174,7 +174,7 @@ export const PRODUCTS: Product[] = [
     name: "EKOL SPECIAL 99 REV-II",
     caliber: "9 mm P.A.",
     intents: ["defensa", "deportivo"],
-    image: ekolSpecial99.url,
+    image: ekolSpecial99,
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
@@ -193,7 +193,7 @@ export const PRODUCTS: Product[] = [
     name: "EKOL FIRAT COMPACT",
     caliber: "9 mm P.A.",
     intents: ["defensa"],
-    image: ekolFiratCompact.url,
+    image: ekolFiratCompact,
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
@@ -365,7 +365,7 @@ function ProductCard({
         </span>
       </div>
 
-      <div className="relative aspect-[16/10] overflow-hidden bg-[#1A1A1A]">
+      <div className="relative aspect-[3/4] overflow-hidden bg-[#1A1A1A]">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.08]"
           style={{
@@ -378,7 +378,7 @@ function ProductCard({
           src={product.image}
           alt={`${product.name} — ${product.caliber}`}
           loading="lazy"
-          className="absolute inset-0 h-full w-full object-contain p-4 transition-transform duration-700 group-hover:scale-[1.04]"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
         />
 
         <div className="pointer-events-none absolute left-3 right-3 top-3 flex items-center gap-2 opacity-60">

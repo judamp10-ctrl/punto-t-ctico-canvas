@@ -48,9 +48,21 @@ interface Bullet {
   spin: number;
 }
 
+// Seeded PRNG (mulberry32) — deterministic so SSR and client render identical markup
+function mulberry32(seed: number) {
+  return () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 export function BulletsBackground({ count = 24 }: { count?: number }) {
   const bullets = useMemo<Bullet[]>(() => {
-    const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+    const random = mulberry32(0x9e3779b9);
+    const rand = (min: number, max: number) => random() * (max - min) + min;
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       left: rand(0, 100),
@@ -58,11 +70,11 @@ export function BulletsBackground({ count = 24 }: { count?: number }) {
       duration: rand(16, 34),
       delay: rand(-30, 0),
       // depth of field: farther bullets slightly blurred
-      blur: Math.random() < 0.45 ? rand(0.8, 2.4) : 0,
+      blur: random() < 0.45 ? rand(0.8, 2.4) : 0,
       opacity: rand(0.55, 1),
       wobble: rand(-8, 8), // tiny horizontal deviation (px)
       rotate: rand(-12, 12), // starting tilt
-      spin: rand(20, 90) * (Math.random() < 0.5 ? -1 : 1), // gentle rotation
+      spin: rand(20, 90) * (random() < 0.5 ? -1 : 1), // gentle rotation
     }));
   }, [count]);
 
