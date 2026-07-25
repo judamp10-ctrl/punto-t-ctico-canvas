@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useScroll, useSpring } from "motion/react";
+import { WHATSAPP_URL } from "@/components/Catalog";
 
 export function Navbar() {
   const { scrollYProgress } = useScroll();
@@ -7,13 +8,12 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-[color:var(--amber)]/20 bg-black/70 backdrop-blur-md">
-      {/* Scroll progress — tactical amber tracer */}
       <motion.div
         aria-hidden
         className="absolute inset-x-0 bottom-[-1px] h-[2px] origin-left bg-gradient-to-r from-[color:var(--amber)]/60 via-[color:var(--amber)] to-[color:var(--amber-glow)] shadow-[0_0_8px_var(--amber)]"
         style={{ scaleX: progress }}
       />
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
         <Link to="/" className="flex items-center gap-3">
           <div className="flex h-7 w-7 items-center justify-center border border-[color:var(--amber)]/70">
             <div className="h-2 w-2 bg-[color:var(--amber)] shadow-[0_0_8px_var(--amber)]" />
@@ -31,20 +31,22 @@ export function Navbar() {
         <nav className="hidden items-center gap-8 font-mono-tech text-[11px] text-muted-foreground md:flex">
           <a href="#catalogo" className="hover:text-amber transition-colors">Catálogo</a>
           <a href="#accesorios" className="hover:text-amber transition-colors">Accesorios</a>
-          <a href="#legal" className="hover:text-amber transition-colors">Marco Legal</a>
+          <a href="#marco-legal" className="hover:text-amber transition-colors">Marco Legal</a>
           <a href="#contacto" className="hover:text-amber transition-colors">Contacto</a>
         </nav>
 
         <div className="flex items-center gap-3">
           <a
-            href="#asesoria"
-            className="group inline-flex items-center gap-2 border border-[color:var(--amber)]/70 bg-transparent px-4 py-2 font-mono-tech text-[11px] text-amber transition-all hover:bg-[color:var(--amber)] hover:text-primary-foreground"
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2 border border-[color:var(--amber)]/70 bg-transparent px-3 py-2 font-mono-tech text-[10px] text-amber transition-all hover:bg-[color:var(--amber)] hover:text-primary-foreground md:px-4 md:text-[11px]"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--amber)] shadow-[0_0_8px_var(--amber)] group-hover:bg-black" />
-            Solicitar Asesoría
+            <span className="hidden sm:inline">Solicitar Asesoría</span>
+            <span className="sm:hidden">Asesoría</span>
           </a>
         </div>
-
       </div>
     </header>
   );

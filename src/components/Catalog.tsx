@@ -1,15 +1,22 @@
 import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X } from "lucide-react";
-import ekolViper from "@/assets/products/ekol-viper-3.jpg";
-import retayS2022 from "@/assets/products/retay-s2022.jpg";
-import blowF92 from "@/assets/products/blow-f92.jpg";
-import retayG17 from "@/assets/products/retay-g17.jpg";
-import ekolNig211 from "@/assets/products/ekol-nig-211.jpg";
-import ekolFiratMagnum from "@/assets/products/ekol-firat-magnum.jpg";
-import blowTr92d from "@/assets/products/blow-tr92d.jpg";
-import ekolSpecial99 from "@/assets/products/ekol-special-99.jpg";
-import ekolFiratCompact from "@/assets/products/ekol-firat-compact.jpg";
+
+import blowMini9 from "@/assets/products/blow-mini-9.jpg.asset.json";
+import ekolViper25 from "@/assets/products/ekol-viper-25.jpg.asset.json";
+import blowTr14 from "@/assets/products/blow-tr14.jpg.asset.json";
+import blowTrz914 from "@/assets/products/blow-trz914.jpg.asset.json";
+import ekolFiratCompact from "@/assets/products/ekol-firat-compact-v2.jpg.asset.json";
+import retayG19c from "@/assets/products/retay-g19c.jpg.asset.json";
+import retayXtreme from "@/assets/products/retay-xtreme.jpg.asset.json";
+import retayXpro from "@/assets/products/retay-xpro.jpg.asset.json";
+import ekolNig211 from "@/assets/products/ekol-nig-211-v2.jpg.asset.json";
+import blowF92 from "@/assets/products/blow-f92-v2.jpg.asset.json";
+import ekolViper45 from "@/assets/products/ekol-viper-45.jpg.asset.json";
+import escopetaCal12 from "@/assets/products/escopeta-cal12.jpg.asset.json";
+import fusil9mm from "@/assets/products/fusil-9mm.jpg.asset.json";
+import ekolAsi from "@/assets/products/ekol-asi.jpg.asset.json";
+import ekolJackal from "@/assets/products/ekol-jackal.jpg.asset.json";
 
 type Intent = "defensa" | "deportivo" | "tactico";
 
@@ -32,179 +39,297 @@ export interface Product {
   description: string;
 }
 
-const WHATSAPP = "https://wa.me/573000000000";
+export const WHATSAPP_URL =
+  "https://wa.me/573027104931?text=Hola%20Punto%20T%C3%A1ctico,%20solicito%20asesor%C3%ADa%20para%20adquisici%C3%B3n";
 
 export const PRODUCTS: Product[] = [
+  // ---------- DEFENSA PERSONAL ----------
   {
-    id: "ekol-viper-3",
-    code: "PT·V03",
-    name: "EKOL VIPER 3.0",
+    id: "blow-mini-9",
+    code: "PT·BM9",
+    name: "BLOW MINI 9",
     caliber: "9 mm P.A.",
     intents: ["defensa"],
-    image: ekolViper,
+    image: blowMini9.url,
     specs: {
-      action: "Doble acción · Revólver",
-      capacity: "6 tiros",
-      barrel: '3" (76 mm)',
-      weight: "730 g",
-      length: "20 cm",
-      material: "Aleación de acero / Zamak",
+      action: "Semi-automática",
+      capacity: "6+1",
+      barrel: "86 mm",
+      weight: "550 g",
+      length: "154 mm",
+      material: "Polímero alta resistencia",
     },
     status: "DISPONIBLE",
     description:
-      "Revólver traumático de doble acción, robusto y confiable. Diseño clásico para portadores civiles que priorizan simplicidad mecánica y disuasión inmediata.",
+      "Pistola traumática ultra-compacta para porte encubierto. Diseño discreto y confiable sin sacrificar potencia.",
   },
   {
-    id: "retay-s2022",
-    code: "PT·S22",
-    name: "RETAY S2022",
+    id: "ekol-viper-25",
+    code: "PT·V25",
+    name: "EKOL VIPER 2.5\"",
     caliber: "9 mm P.A.",
-    intents: ["defensa", "deportivo"],
-    image: retayS2022,
+    intents: ["defensa"],
+    image: ekolViper25.url,
+    specs: {
+      action: "Revólver · Doble Acción",
+      capacity: "6 tiros",
+      barrel: "2.5\"",
+      weight: "850 g",
+      length: "180 mm",
+      material: "Aleación metálica",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Revólver traumático compacto de doble acción. Simplicidad mecánica, confiabilidad absoluta y disuasión inmediata.",
+  },
+  {
+    id: "blow-tr14",
+    code: "PT·TR14",
+    name: "BLOW TR 14",
+    caliber: "9 mm P.A.",
+    intents: ["defensa"],
+    image: blowTr14.url,
+    specs: {
+      action: "Semi-automática",
+      capacity: "14+1",
+      barrel: "4.1\"",
+      weight: "850 g",
+      length: "186 mm",
+      material: "Aleación metálica",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Plataforma metálica de servicio para portador civil. Alta capacidad y precisión mecánica.",
+  },
+  {
+    id: "blow-trz914",
+    code: "PT·TZ914",
+    name: "BLOW TRZ 914",
+    caliber: "9 mm P.A.",
+    intents: ["defensa"],
+    image: blowTrz914.url,
+    specs: {
+      action: "Semi-automática",
+      capacity: "14+1",
+      barrel: "3.9\"",
+      weight: "730 g",
+      length: "160 mm",
+      material: "Metal Body",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Compacta metálica con equilibrio óptimo entre peso y capacidad. Ideal EDC.",
+  },
+  {
+    id: "ekol-firat-compact",
+    code: "PT·FC9",
+    name: "EKOL FIRAT COMPACT",
+    caliber: "9 mm P.A.K.",
+    intents: ["defensa"],
+    image: ekolFiratCompact.url,
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
-      barrel: '4.5" (114 mm)',
-      weight: "830 g",
-      length: "20 cm",
-      material: "Aleación / Polímero",
+      barrel: "3.9\"",
+      weight: "950 g",
+      length: "189 mm",
+      material: "Zamak",
     },
     status: "DISPONIBLE",
     description:
-      "Plataforma semi-automática balanceada. Alta capacidad, ergonomía moderna y disparo consistente para defensa civil y práctica en polígono.",
+      "Versión compacta de la Firat con capacidad de servicio. Portabilidad óptima para EDC civil.",
+  },
+  {
+    id: "retay-g19c",
+    code: "PT·G19C",
+    name: "RETAY G19C",
+    caliber: "9 mm P.A.",
+    intents: ["defensa"],
+    image: retayG19c.url,
+    specs: {
+      action: "Semi-automática · Striker",
+      capacity: "14+1",
+      barrel: "4.0\"",
+      weight: "~750 g",
+      length: "190 mm",
+      material: "Aleación metálica",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Referencia striker-fired compacta. Manejo instintivo y rápido despliegue defensivo.",
+  },
+  // ---------- TIRO DEPORTIVO ----------
+  {
+    id: "retay-xtreme",
+    code: "PT·XTR",
+    name: "RETAY X TREME",
+    caliber: "9 mm P.A.",
+    intents: ["deportivo"],
+    image: retayXtreme.url,
+    specs: {
+      action: "Semi-automática",
+      capacity: "14+1",
+      barrel: "4.5\"",
+      weight: "740 g",
+      length: "190 mm",
+      material: "Polímero",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Plataforma deportiva ligera con excelente balance. Rápida recuperación de disparo.",
+  },
+  {
+    id: "retay-xpro",
+    code: "PT·XPR",
+    name: "RETAY X PRO",
+    caliber: "9 mm P.A.",
+    intents: ["deportivo"],
+    image: retayXpro.url,
+    specs: {
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: "4.5\"",
+      weight: "740 g",
+      length: "190 mm",
+      material: "Polímero",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Versión Pro de alta capacidad. Precisión y consistencia para práctica intensiva en polígono.",
+  },
+  {
+    id: "ekol-nig-211",
+    code: "PT·N211",
+    name: "EKOL NIG 211",
+    caliber: "9 mm P.A.K.",
+    intents: ["deportivo"],
+    image: ekolNig211.url,
+    specs: {
+      action: "Semi-automática",
+      capacity: "14+1",
+      barrel: "3.9\"",
+      weight: "950 g",
+      length: "190 mm",
+      material: "Zamak",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Chasis 1911-style con masa aumentada. Estabilidad y precisión de disparo premium.",
   },
   {
     id: "blow-f92",
     code: "PT·F92",
     name: "BLOW F 92",
     caliber: "9 mm P.A.",
-    intents: ["defensa", "tactico"],
-    image: blowF92,
+    intents: ["deportivo"],
+    image: blowF92.url,
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
-      barrel: '4.5" (114 mm)',
+      barrel: "4.5\"",
       weight: "950 g",
-      length: "21 cm",
-      material: "Aleación forjada",
+      length: "210 mm",
+      material: "Metal Body",
     },
     status: "DISPONIBLE",
     description:
-      "Chasis metálico de servicio pesado, inspirado en la plataforma 92. Estabilidad de disparo y sensación operativa premium.",
+      "Plataforma inspirada en la 92 con chasis metálico. Sensación operativa premium.",
   },
   {
-    id: "retay-g17",
-    code: "PT·G17",
-    name: "RETAY G17",
+    id: "ekol-viper-45",
+    code: "PT·V45",
+    name: "EKOL VIPER 4.5\"",
     caliber: "9 mm P.A.",
-    intents: ["deportivo", "tactico"],
-    image: retayG17,
+    intents: ["deportivo"],
+    image: ekolViper45.url,
     specs: {
-      action: "Semi-automática · Striker",
+      action: "Revólver · Doble Acción",
+      capacity: "6 tiros",
+      barrel: "4.5\"",
+      weight: "980 g",
+      length: "245 mm",
+      material: "Aleación metálica",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Revólver traumático de cañón largo. Máxima precisión para tiro deportivo y polígono.",
+  },
+  // ---------- ENTRENAMIENTO TÁCTICO ----------
+  {
+    id: "escopeta-cal12",
+    code: "PT·ESC12",
+    name: "ESCOPETA CALIBRE 12",
+    caliber: "12 Traumática",
+    intents: ["tactico"],
+    image: escopetaCal12.url,
+    specs: {
+      action: "Bombeo (Pump-Action)",
+      capacity: "5+1",
+      barrel: "18\"",
+      weight: "~2.8 kg",
+      length: "930 mm",
+      material: "Polímero alta resistencia",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Escopeta táctica calibre 12 traumática. Máxima disuasión con acción de bombeo confiable.",
+  },
+  {
+    id: "fusil-9mm",
+    code: "PT·F9",
+    name: "FUSIL CALIBRE 9MM",
+    caliber: "9 mm",
+    intents: ["tactico"],
+    image: fusil9mm.url,
+    specs: {
+      action: "Semi-automático",
+      capacity: "Alta capacidad",
+      barrel: "10\"",
+      weight: "~3 kg",
+      length: "780 mm",
+      material: "Polímero alta resistencia",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Fusil semi-automático 9mm con cargadores de alta capacidad. Plataforma modular de entrenamiento táctico.",
+  },
+  {
+    id: "ekol-asi",
+    code: "PT·ASI",
+    name: "EKOL ASI",
+    caliber: "9 mm P.A.K.",
+    intents: ["tactico"],
+    image: ekolAsi.url,
+    specs: {
+      action: "Full & Semi Auto",
       capacity: "17+1",
-      barrel: '4.49" (114 mm)',
-      weight: "830 g",
-      length: "20 cm",
-      material: "Polímero / Acero nitrurado",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Referencia striker-fired de alta capacidad. Ideal para entrenamiento táctico y disciplinas de tiro rápido.",
-  },
-  {
-    id: "ekol-nig-211",
-    code: "PT·N21",
-    name: "EKOL NIG 211",
-    caliber: "9 mm P.A.",
-    intents: ["defensa"],
-    image: ekolNig211,
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: '3.9" (99 mm)',
-      weight: "780 g",
-      length: "17.5 cm",
+      barrel: "5.5\"",
+      weight: "2100 g",
+      length: "485 mm",
       material: "Aleación / Polímero",
     },
-    status: "DISPONIBLE",
+    status: "BAJO CONSULTA",
     description:
-      "Compacta 1911-style para porte encubierto. Excelente relación tamaño/capacidad para EDC civil.",
+      "Subfusil traumático de selección full/semi auto. Plataforma operativa premium para entrenamiento táctico avanzado.",
   },
   {
-    id: "blow-tr92d",
-    code: "PT·T92",
-    name: "BLOW TR92 D",
-    caliber: "9 mm P.A.",
-    intents: ["defensa"],
-    image: blowTr92d,
-    specs: {
-      action: "Semi-automática DA/SA",
-      capacity: "15+1",
-      barrel: '4.1" (104 mm)',
-      weight: "720 g",
-      length: "19 cm",
-      material: "Aleación ligera",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Ligera y ágil. Manejo instintivo con capacidad de servicio; una plataforma equilibrada para portador civil experimentado.",
-  },
-  {
-    id: "ekol-firat-magnum",
-    code: "PT·FM9",
-    name: "EKOL FIRAT MAGNUM",
-    caliber: "9 mm P.A.",
-    intents: ["tactico", "deportivo"],
-    image: ekolFiratMagnum,
+    id: "ekol-jackal",
+    code: "PT·JKM",
+    name: "EKOL JACKAL DUAL MAGNUM",
+    caliber: "9 mm P.A.K.",
+    intents: ["tactico"],
+    image: ekolJackal.url,
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
-      barrel: '4.5" (114 mm)',
-      weight: "930 g",
-      length: "21 cm",
-      material: "Acero / Aleación",
+      barrel: "5.0\"",
+      weight: "1050 g",
+      length: "220 mm",
+      material: "Zamak",
     },
     status: "DISPONIBLE",
     description:
-      "Versión reforzada de la línea Firat. Masa aumentada para reducción de retroceso y desempeño premium en polígono.",
-  },
-  {
-    id: "ekol-special-99",
-    code: "PT·S99",
-    name: "EKOL SPECIAL 99 REV-II",
-    caliber: "9 mm P.A.",
-    intents: ["defensa", "deportivo"],
-    image: ekolSpecial99,
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: '4.5" (114 mm)',
-      weight: "830 g",
-      length: "20 cm",
-      material: "Aleación / Polímero",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Modelo insignia de la línea Special. Acabado premium y ergonomía refinada para uso mixto defensivo/deportivo.",
-  },
-  {
-    id: "ekol-firat-compact",
-    code: "PT·FC9",
-    name: "EKOL FIRAT COMPACT",
-    caliber: "9 mm P.A.",
-    intents: ["defensa"],
-    image: ekolFiratCompact,
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: '3.9" (99 mm)',
-      weight: "780 g",
-      length: "17.5 cm",
-      material: "Aleación / Polímero",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Versión compacta de la Firat. Portabilidad óptima manteniendo capacidad de servicio: ideal EDC civil.",
+      "Plataforma reforzada Dual Magnum con masa aumentada. Reducción de retroceso y desempeño táctico.",
   },
 ];
 
@@ -225,10 +350,10 @@ export function Catalog() {
   );
 
   return (
-    <section id="catalogo" className="relative border-t border-[color:var(--amber)]/10 bg-[#0A0A0A] py-20 md:py-28">
-      <div className="pointer-events-none absolute inset-0 opacity-30 bg-grain mix-blend-overlay" />
+    <section id="catalogo" className="relative border-t border-[color:var(--amber)]/10 py-20 md:py-28">
+      <div className="pointer-events-none absolute inset-0 opacity-20 bg-grain mix-blend-overlay" />
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
             "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)",
@@ -238,7 +363,7 @@ export function Catalog() {
 
       <div className="relative mx-auto max-w-7xl px-4 md:px-8">
         {/* Header */}
-        <div className="mb-12 md:mb-16">
+        <div className="mb-10 md:mb-14">
           <div className="flex items-center gap-3 font-mono-tech text-[10px] text-amber/80">
             <span className="h-1.5 w-1.5 animate-hud-pulse rounded-full bg-[color:var(--amber)] shadow-[0_0_8px_var(--amber)]" />
             [SYS.INV.ONLINE]
@@ -271,7 +396,7 @@ export function Catalog() {
         </div>
 
         {/* Intent Filters */}
-        <div className="mb-10 border-y border-[color:var(--amber)]/15">
+        <div className="mb-8 border-y border-[color:var(--amber)]/15">
           <div className="flex flex-wrap gap-0">
             {INTENTS.map((it) => {
               const active = intent === it.id;
@@ -279,7 +404,7 @@ export function Catalog() {
                 <button
                   key={it.id}
                   onClick={() => setIntent(it.id)}
-                  className={`group relative flex-1 min-w-[160px] border-r border-[color:var(--amber)]/15 px-4 py-4 text-left transition-colors last:border-r-0 ${
+                  className={`group relative flex-1 min-w-[140px] border-r border-[color:var(--amber)]/15 px-3 py-3 text-left transition-colors last:border-r-0 ${
                     active ? "bg-[color:var(--amber)]/10" : "hover:bg-[color:var(--amber)]/5"
                   }`}
                 >
@@ -287,7 +412,7 @@ export function Catalog() {
                     [{it.sub}]
                   </div>
                   <div
-                    className={`mt-1 text-sm font-semibold uppercase tracking-wide md:text-base ${active ? "text-foreground" : "text-foreground/70"}`}
+                    className={`mt-1 text-xs font-semibold uppercase tracking-wide md:text-sm ${active ? "text-foreground" : "text-foreground/70"}`}
                   >
                     {it.label}
                   </div>
@@ -303,8 +428,11 @@ export function Catalog() {
           </div>
         </div>
 
-        {/* Grid */}
-        <motion.div layout className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Compact Grid: 2 / 3 / 4 */}
+        <motion.div
+          layout
+          className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4"
+        >
           <AnimatePresence mode="popLayout">
             {filtered.map((p, i) => (
               <ProductCard key={p.id} product={p} index={i} onOpen={() => setDetail(p)} />
@@ -341,83 +469,72 @@ function ProductCard({
   return (
     <motion.article
       layout
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
-      className="group relative cursor-pointer border border-[color:var(--amber)]/10 bg-[#111] transition-all duration-300 hover:border-[color:var(--amber)]/70 hover:shadow-[0_0_40px_-10px_rgba(245,166,35,0.4)]"
+      exit={{ opacity: 0, y: -6 }}
+      transition={{ duration: 0.35, delay: Math.min(index * 0.03, 0.3) }}
+      className="group relative flex cursor-pointer flex-col border border-[color:var(--amber)]/10 bg-[#111] transition-all duration-300 hover:border-[color:var(--amber)]/70 hover:shadow-[0_0_32px_-10px_rgba(245,166,35,0.45)]"
       onClick={onOpen}
     >
-      <span className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l border-t border-[color:var(--amber)]/70" />
-      <span className="pointer-events-none absolute right-0 top-0 h-3 w-3 border-r border-t border-[color:var(--amber)]/70" />
-      <span className="pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b border-l border-[color:var(--amber)]/70" />
-      <span className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[color:var(--amber)]/70" />
+      <span className="pointer-events-none absolute left-0 top-0 h-2.5 w-2.5 border-l border-t border-[color:var(--amber)]/70" />
+      <span className="pointer-events-none absolute right-0 top-0 h-2.5 w-2.5 border-r border-t border-[color:var(--amber)]/70" />
+      <span className="pointer-events-none absolute bottom-0 left-0 h-2.5 w-2.5 border-b border-l border-[color:var(--amber)]/70" />
+      <span className="pointer-events-none absolute bottom-0 right-0 h-2.5 w-2.5 border-b border-r border-[color:var(--amber)]/70" />
 
-      <div className="flex items-center justify-between border-b border-[color:var(--amber)]/10 px-3 py-2 font-mono-tech text-[9px]">
+      <div className="flex items-center justify-between border-b border-[color:var(--amber)]/10 px-2.5 py-1.5 font-mono-tech text-[8px]">
         <span className="text-amber">{product.code}</span>
         <span
-          className={`flex items-center gap-1.5 ${product.status === "DISPONIBLE" ? "text-amber" : "text-muted-foreground"}`}
+          className={`flex items-center gap-1 ${product.status === "DISPONIBLE" ? "text-amber" : "text-muted-foreground"}`}
         >
           <span
-            className={`h-1.5 w-1.5 rounded-full ${product.status === "DISPONIBLE" ? "bg-[color:var(--amber)] shadow-[0_0_6px_var(--amber)] animate-hud-pulse" : "bg-muted-foreground/50"}`}
+            className={`h-1 w-1 rounded-full ${product.status === "DISPONIBLE" ? "bg-[color:var(--amber)] shadow-[0_0_6px_var(--amber)] animate-hud-pulse" : "bg-muted-foreground/50"}`}
           />
           {product.status}
         </span>
       </div>
 
-      <div className="relative aspect-[3/4] overflow-hidden bg-[#1A1A1A]">
+      <div className="relative aspect-square overflow-hidden bg-[#1A1A1A]">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.08]"
           style={{
             backgroundImage:
               "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
+            backgroundSize: "20px 20px",
           }}
         />
         <img
           src={product.image}
           alt={`${product.name} — ${product.caliber}`}
           loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
         />
 
-        <div className="pointer-events-none absolute left-3 right-3 top-3 flex items-center gap-2 opacity-60">
-          <div className="h-1.5 w-px bg-[color:var(--amber)]/70" />
-          <div className="h-px flex-1 bg-[color:var(--amber)]/40" />
-          <span className="font-mono-tech text-[8px] text-amber/80">{product.specs.length}</span>
-          <div className="h-px flex-1 bg-[color:var(--amber)]/40" />
-          <div className="h-1.5 w-px bg-[color:var(--amber)]/70" />
-        </div>
-
-        {/* Blueprint hover overlay with specs */}
-        <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/80 to-black/30 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <div className="font-mono-tech text-[9px] text-amber/80">[SPECS · CLASIFICADO]</div>
-          <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 font-mono-tech text-[10px]">
-            <SpecRow k="ACT" v={product.specs.action} />
+        {/* Hover blueprint */}
+        <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/80 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <div className="font-mono-tech text-[8px] text-amber/80">[SPECS]</div>
+          <div className="mt-1.5 grid grid-cols-2 gap-x-2 gap-y-0.5 font-mono-tech text-[9px]">
             <SpecRow k="CAP" v={product.specs.capacity} />
-            <SpecRow k="BBL" v={product.specs.barrel} />
-            <SpecRow k="MASS" v={product.specs.weight} />
             <SpecRow k="LEN" v={product.specs.length} />
-            <SpecRow k="MAT" v={product.specs.material} />
+            <SpecRow k="MASS" v={product.specs.weight} />
+            <SpecRow k="BBL" v={product.specs.barrel} />
           </div>
         </div>
       </div>
 
-      <div className="p-4">
-        <div className="flex items-baseline justify-between gap-3">
-          <h3 className="text-base font-bold uppercase tracking-wide text-foreground md:text-lg">{product.name}</h3>
-          <span className="font-mono-tech text-[9px] text-muted-foreground">CAL</span>
-        </div>
-        <div className="mt-1 flex items-center justify-between">
-          <span className="font-mono-tech text-[10px] text-amber">{product.caliber}</span>
-          <span className="font-mono-tech text-[9px] text-muted-foreground">{product.specs.capacity}</span>
+      <div className="flex flex-1 flex-col justify-between p-2.5 md:p-3">
+        <div>
+          <h3 className="text-[13px] font-bold uppercase leading-tight tracking-wide text-foreground md:text-sm">
+            {product.name}
+          </h3>
+          <div className="mt-1 flex items-center justify-between font-mono-tech text-[9px]">
+            <span className="text-amber">{product.caliber}</span>
+            <span className="text-muted-foreground">{product.specs.capacity}</span>
+          </div>
         </div>
 
-        <div
-          className="mt-4 flex items-center justify-between border border-[color:var(--amber)]/50 px-3 py-2.5 font-mono-tech text-[10px] text-amber transition-all group-hover:bg-[color:var(--amber)] group-hover:text-primary-foreground group-hover:shadow-[0_0_24px_-4px_var(--amber)]"
-        >
-          <span>Ver Ficha Técnica</span>
-          <svg width="12" height="10" viewBox="0 0 14 10" fill="none">
+        <div className="mt-2.5 flex items-center justify-between border border-[color:var(--amber)]/50 px-2 py-1.5 font-mono-tech text-[9px] text-amber transition-all group-hover:bg-[color:var(--amber)] group-hover:text-primary-foreground">
+          <span>Ver Ficha</span>
+          <svg width="10" height="8" viewBox="0 0 14 10" fill="none">
             <path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="currentColor" strokeWidth="1.2" />
           </svg>
         </div>
@@ -428,7 +545,7 @@ function ProductCard({
 
 function SpecRow({ k, v }: { k: string; v: string }) {
   return (
-    <div className="flex items-center justify-between gap-2 border-b border-[color:var(--amber)]/10 pb-1">
+    <div className="flex items-center justify-between gap-1.5 border-b border-[color:var(--amber)]/10 pb-0.5">
       <span className="text-muted-foreground">{k}</span>
       <span className="truncate text-right text-foreground/90">{v}</span>
     </div>
@@ -447,18 +564,14 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
     };
   }, [onClose]);
 
-  const waLink = `${WHATSAPP}?text=${encodeURIComponent(
-    `Hola Punto Táctico, quiero consultar disponibilidad de ${product.name} (${product.code}).`,
-  )}`;
-
   const specRows: [string, string][] = [
+    ["Calibre", product.caliber],
     ["Acción", product.specs.action],
     ["Capacidad", product.specs.capacity],
     ["Cañón", product.specs.barrel],
     ["Peso", product.specs.weight],
     ["Longitud total", product.specs.length],
     ["Material", product.specs.material],
-    ["Calibre", product.caliber],
   ];
 
   return (
@@ -466,58 +579,51 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/80 p-3 backdrop-blur-md md:p-6"
       onClick={onClose}
     >
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 10, scale: 0.98 }}
-        transition={{ duration: 0.25 }}
+        transition={{ duration: 0.22 }}
         onClick={(e) => e.stopPropagation()}
-        className="relative grid max-h-[92vh] w-full max-w-6xl grid-cols-1 overflow-hidden border border-[color:var(--amber)]/40 bg-[#0A0A0A] shadow-[0_0_80px_-10px_rgba(245,166,35,0.35)] md:grid-cols-[1.15fr_1fr]"
+        className="relative my-auto flex w-full max-w-4xl flex-col border border-[color:var(--amber)]/40 bg-[#0A0A0A] shadow-[0_0_80px_-10px_rgba(245,166,35,0.35)] md:flex-row"
       >
-        <span className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l border-t border-[color:var(--amber)]" />
-        <span className="pointer-events-none absolute right-0 top-0 h-4 w-4 border-r border-t border-[color:var(--amber)]" />
-        <span className="pointer-events-none absolute bottom-0 left-0 h-4 w-4 border-b border-l border-[color:var(--amber)]" />
-        <span className="pointer-events-none absolute bottom-0 right-0 h-4 w-4 border-b border-r border-[color:var(--amber)]" />
+        <span className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l border-t border-[color:var(--amber)]" />
+        <span className="pointer-events-none absolute right-0 top-0 h-3 w-3 border-r border-t border-[color:var(--amber)]" />
+        <span className="pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b border-l border-[color:var(--amber)]" />
+        <span className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[color:var(--amber)]" />
 
+        {/* Close button - large & tap-friendly */}
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center border border-[color:var(--amber)]/40 bg-black/60 text-amber transition-colors hover:bg-[color:var(--amber)] hover:text-primary-foreground"
+          className="absolute right-2 top-2 z-20 flex h-11 w-11 items-center justify-center border border-[color:var(--amber)] bg-black/80 text-amber transition-colors hover:bg-[color:var(--amber)] hover:text-primary-foreground md:right-3 md:top-3"
           aria-label="Cerrar"
         >
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" strokeWidth={2.5} />
         </button>
 
         {/* Image side */}
-        <div className="relative flex items-center justify-center overflow-hidden bg-[#111] p-6 md:p-10">
+        <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden bg-[#111] p-4 md:aspect-auto md:w-1/2 md:p-8">
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.09]"
             style={{
               backgroundImage:
                 "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)",
-              backgroundSize: "28px 28px",
+              backgroundSize: "24px 24px",
             }}
           />
           <img
             src={product.image}
             alt={product.name}
-            className="relative z-10 max-h-[60vh] w-full object-contain"
+            className="relative z-10 max-h-full max-w-full object-contain"
           />
-          {/* Corner measurements */}
-          <div className="pointer-events-none absolute left-4 right-4 top-4 flex items-center gap-2 opacity-70">
-            <div className="h-1.5 w-px bg-[color:var(--amber)]" />
-            <div className="h-px flex-1 bg-[color:var(--amber)]/50" />
-            <span className="font-mono-tech text-[9px] text-amber">{product.specs.length}</span>
-            <div className="h-px flex-1 bg-[color:var(--amber)]/50" />
-            <div className="h-1.5 w-px bg-[color:var(--amber)]" />
-          </div>
         </div>
 
         {/* Info side */}
-        <div className="relative flex max-h-[92vh] flex-col overflow-y-auto">
-          <div className="flex items-center justify-between border-b border-[color:var(--amber)]/20 px-6 py-3 font-mono-tech text-[10px]">
+        <div className="flex w-full flex-col md:w-1/2">
+          <div className="flex items-center justify-between border-b border-[color:var(--amber)]/20 px-4 py-2.5 pr-14 font-mono-tech text-[10px] md:px-6">
             <span className="text-amber">{product.code}</span>
             <span className="flex items-center gap-1.5 text-amber">
               <span className="h-1.5 w-1.5 animate-hud-pulse rounded-full bg-[color:var(--amber)] shadow-[0_0_6px_var(--amber)]" />
@@ -525,64 +631,42 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
             </span>
           </div>
 
-          <div className="flex-1 space-y-6 px-6 py-6 md:px-8">
+          <div className="flex-1 space-y-5 overflow-y-auto px-4 py-5 md:px-6 md:py-6">
             <div>
-              <div className="font-mono-tech text-[10px] uppercase tracking-[0.25em] text-amber/80">
-                FICHA TÉCNICA · CLASIFICADA
+              <div className="font-mono-tech text-[9px] uppercase tracking-[0.25em] text-amber/80">
+                Ficha Técnica
               </div>
               <h3
-                className="mt-3 font-black uppercase leading-[0.95] tracking-tight text-foreground"
-                style={{ fontSize: "clamp(1.75rem, 3.2vw, 2.5rem)" }}
+                className="mt-2 font-black uppercase leading-[0.95] tracking-tight text-foreground"
+                style={{ fontSize: "clamp(1.4rem, 3vw, 2rem)" }}
               >
                 {product.name}
               </h3>
-              <div className="mt-2 font-mono-tech text-[11px] text-amber">{product.caliber}</div>
             </div>
 
-            <p className="text-sm leading-relaxed text-muted-foreground">{product.description}</p>
+            <p className="text-[13px] leading-relaxed text-muted-foreground">{product.description}</p>
 
-            <div>
-              <div className="mb-3 font-mono-tech text-[10px] uppercase tracking-widest text-amber/80">
-                Especificaciones
-              </div>
-              <dl className="grid grid-cols-1 border border-[color:var(--amber)]/20 font-mono-tech text-[11px]">
-                {specRows.map(([k, v], i) => (
-                  <div
-                    key={k}
-                    className={`flex items-center justify-between px-4 py-2.5 ${
-                      i < specRows.length - 1 ? "border-b border-[color:var(--amber)]/10" : ""
-                    }`}
-                  >
-                    <dt className="uppercase tracking-widest text-muted-foreground">{k}</dt>
-                    <dd className="text-right text-foreground">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-
-            <div>
-              <div className="mb-2 font-mono-tech text-[10px] uppercase tracking-widest text-amber/80">
-                Perfil operativo
-              </div>
-              <div className="flex flex-wrap gap-2 font-mono-tech text-[10px]">
-                {product.intents.map((i) => (
-                  <span
-                    key={i}
-                    className="border border-[color:var(--amber)]/40 px-2.5 py-1 uppercase tracking-widest text-amber"
-                  >
-                    {i}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <dl className="grid grid-cols-1 border border-[color:var(--amber)]/20 font-mono-tech text-[11px]">
+              {specRows.map(([k, v], i) => (
+                <div
+                  key={k}
+                  className={`flex items-center justify-between px-3 py-2 ${
+                    i < specRows.length - 1 ? "border-b border-[color:var(--amber)]/10" : ""
+                  }`}
+                >
+                  <dt className="uppercase tracking-widest text-muted-foreground">{k}</dt>
+                  <dd className="text-right text-foreground">{v}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
 
-          <div className="border-t border-[color:var(--amber)]/20 bg-black/60 p-4">
+          <div className="border-t border-[color:var(--amber)]/20 bg-black/60 p-3 md:p-4">
             <a
-              href={waLink}
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between border border-[color:var(--amber)] bg-[color:var(--amber)]/10 px-5 py-3 font-mono-tech text-[11px] uppercase tracking-wider text-amber transition-all hover:bg-[color:var(--amber)] hover:text-primary-foreground hover:shadow-[0_0_25px_-4px_var(--amber)]"
+              className="flex items-center justify-between border border-[color:var(--amber)] bg-[color:var(--amber)]/10 px-4 py-3 font-mono-tech text-[11px] uppercase tracking-wider text-amber transition-all hover:bg-[color:var(--amber)] hover:text-primary-foreground"
             >
               <span>Consultar Disponibilidad · WhatsApp</span>
               <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
