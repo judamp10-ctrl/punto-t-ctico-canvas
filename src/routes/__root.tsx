@@ -121,8 +121,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="relative min-h-screen bg-background text-foreground">
+        <BulletsBackground />
+        <div className="relative" style={{ zIndex: 1 }}>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </div>
+      </div>
     </QueryClientProvider>
   );
 }
