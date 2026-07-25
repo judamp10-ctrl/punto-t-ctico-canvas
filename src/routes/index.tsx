@@ -1,36 +1,48 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { BulletsBackground } from "@/components/BulletsBackground";
 import { Catalog } from "@/components/Catalog";
 import {
   TheShift,
   TheMechanism,
   TheFramework,
   TheFilter,
+  Poligono,
+  Mantenimiento,
+  Contacto,
   TerminalCTA,
   SiteFooter,
 } from "@/components/sections";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Punto Táctico — Armería Traumática Legal · Colombia" },
+      { name: "description", content: "Inventario operativo de armas traumáticas 9mm P.A., escopetas y fusiles. Registro legal Indumil. Pereira, Colombia." },
+      { property: "og:title", content: "Punto Táctico — Tactical Division CO" },
+      { property: "og:description", content: "Inventario operativo. Trámite legal. Respaldo Indumil." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
 function Index() {
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
-      <BulletsBackground />
-      <div className="relative" style={{ zIndex: 1 }}>
-        <Navbar />
-        <Hero />
-        <Catalog />
-        <TheShift />
-        <TheMechanism />
-        <TheFramework />
-        <TheFilter />
-        <TerminalCTA />
-        <SiteFooter />
-      </div>
-    </div>
+    <>
+      <Navbar />
+      <Hero />
+      <Catalog />
+      <TheShift />
+      <TheMechanism />
+      <TheFramework />
+      <TheFilter />
+      <Poligono />
+      <Mantenimiento />
+      <Contacto />
+      <TerminalCTA />
+      <SiteFooter />
+    </>
   );
 }
