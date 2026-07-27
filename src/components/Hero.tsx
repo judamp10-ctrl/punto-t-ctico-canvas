@@ -1,6 +1,8 @@
 import { motion, useReducedMotion } from "motion/react";
 import heroGun from "@/assets/hero-gun.png";
-import heroBg from "@/assets/hero-bg.jpg";
+
+const heroBg = "/hero.jpg";
+
 
 export function Hero() {
   const reducedMotion = useReducedMotion();
@@ -24,15 +26,13 @@ export function Hero() {
         transition={{ duration: 38, repeat: Infinity, ease: "easeInOut" }}
       />
       {/* Dark overlay for depth */}
+      {/* 40% black overlay */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{
-          zIndex: 0,
-          background:
-            "radial-gradient(ellipse at center, rgba(10,10,10,0.35) 0%, rgba(10,10,10,0.7) 70%, #000 100%)",
-        }}
+        style={{ zIndex: 0, background: "rgba(0,0,0,0.4)" }}
       />
+
       {/* Vignette + grain */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#000_95%)]" />
       <div className="pointer-events-none absolute inset-0 opacity-40 bg-grain mix-blend-overlay" />
