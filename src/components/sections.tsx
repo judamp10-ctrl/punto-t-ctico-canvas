@@ -291,7 +291,7 @@ export function TheFilter() {
 
 /* ---------- [A] PRUEBAS DE POLIGONO ---------- */
 export function Poligono() {
-  const vids = [prueba1.url, prueba2.url, prueba3.url];
+  const vids = VIDEOS.disparos;
   return (
     <section id="poligono" className="relative border-t border-[color:var(--amber)]/15 py-24 md:py-28">
       <div className="mx-auto max-w-7xl px-6">
@@ -305,7 +305,7 @@ export function Poligono() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {vids.map((src, i) => (
             <motion.div
               key={src}
@@ -372,7 +372,7 @@ export function Mantenimiento() {
               </span>
             </div>
             <video
-              src={mantenimientoVid.url}
+              src={VIDEOS.mantenimiento}
               controls
               playsInline
               preload="metadata"
@@ -440,7 +440,7 @@ export function Contacto() {
             </span>
           </div>
           <video
-            src={ubicacionVid.url}
+            src={VIDEOS.ubicacion}
             controls
             playsInline
             preload="metadata"
