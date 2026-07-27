@@ -329,6 +329,7 @@ export function Poligono() {
               <video
                 src={src}
                 controls
+              muted
                 playsInline
                 preload="metadata"
                 className="block aspect-[9/16] w-full bg-black object-cover"
@@ -374,6 +375,7 @@ export function Mantenimiento() {
             <video
               src={VIDEOS.mantenimiento}
               controls
+              muted
               playsInline
               preload="metadata"
               className="block aspect-video w-full bg-black object-cover"
@@ -442,6 +444,7 @@ export function Contacto() {
           <video
             src={VIDEOS.ubicacion}
             controls
+              muted
             playsInline
             preload="metadata"
             className="block aspect-video w-full bg-black object-cover"
