@@ -25,7 +25,6 @@ export function Hero() {
         }
         transition={{ duration: 38, repeat: Infinity, ease: "easeInOut" }}
       />
-      {/* Dark overlay for depth */}
       {/* 40% black overlay */}
       <div
         aria-hidden
