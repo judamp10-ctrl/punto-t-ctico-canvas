@@ -2,23 +2,12 @@ import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X } from "lucide-react";
 
-import blowMini9 from "@/assets/products/blow-mini-9.jpg.asset.json";
-import ekolViper25 from "@/assets/products/ekol-viper-25.jpg.asset.json";
-import blowTr14 from "@/assets/products/blow-tr14.jpg.asset.json";
-import blowTrz914 from "@/assets/products/blow-trz914.jpg.asset.json";
-import ekolFiratCompact from "@/assets/products/ekol-firat-compact-v2.jpg.asset.json";
-import retayG19c from "@/assets/products/retay-g19c.jpg.asset.json";
-import retayXtreme from "@/assets/products/retay-xtreme.jpg.asset.json";
-import retayXpro from "@/assets/products/retay-xpro.jpg.asset.json";
-import ekolNig211 from "@/assets/products/ekol-nig-211-v2.jpg.asset.json";
-import blowF92 from "@/assets/products/blow-f92-v2.jpg.asset.json";
-import ekolViper45 from "@/assets/products/ekol-viper-45.jpg.asset.json";
-import escopetaCal12 from "@/assets/products/escopeta-cal12.jpg.asset.json";
-import fusil9mm from "@/assets/products/fusil-9mm.jpg.asset.json";
-import ekolAsi from "@/assets/products/ekol-asi.jpg.asset.json";
-import ekolJackal from "@/assets/products/ekol-jackal.jpg.asset.json";
-
 type Intent = "defensa" | "deportivo" | "tactico";
+
+export interface ProductVariant {
+  label: string;
+  image: string;
+}
 
 export interface Product {
   id: string;
@@ -26,7 +15,7 @@ export interface Product {
   name: string;
   caliber: string;
   intents: Intent[];
-  image: string;
+  variants: ProductVariant[];
   specs: {
     action: string;
     capacity: string;
@@ -42,15 +31,17 @@ export interface Product {
 export const WHATSAPP_URL =
   "https://wa.me/573027104931?text=Hola%20Punto%20T%C3%A1ctico,%20solicito%20asesor%C3%ADa%20para%20adquisici%C3%B3n";
 
+const P = (file: string) => `/${encodeURIComponent(file)}`;
+
 export const PRODUCTS: Product[] = [
-  // ---------- DEFENSA PERSONAL ----------
+  /* ---------- DEFENSA PERSONAL ---------- */
   {
     id: "blow-mini-9",
     code: "PT·BM9",
     name: "BLOW MINI 9",
     caliber: "9 mm P.A.",
     intents: ["defensa"],
-    image: blowMini9.url,
+    variants: [{ label: "Estándar", image: P("BLOW MINI 9.jpeg") }],
     specs: {
       action: "Semi-automática",
       capacity: "6+1",
@@ -64,31 +55,12 @@ export const PRODUCTS: Product[] = [
       "Pistola traumática ultra-compacta para porte encubierto. Diseño discreto y confiable sin sacrificar potencia.",
   },
   {
-    id: "ekol-viper-25",
-    code: "PT·V25",
-    name: "EKOL VIPER 2.5\"",
-    caliber: "9 mm P.A.",
-    intents: ["defensa"],
-    image: ekolViper25.url,
-    specs: {
-      action: "Revólver · Doble Acción",
-      capacity: "6 tiros",
-      barrel: "2.5\"",
-      weight: "850 g",
-      length: "180 mm",
-      material: "Aleación metálica",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Revólver traumático compacto de doble acción. Simplicidad mecánica, confiabilidad absoluta y disuasión inmediata.",
-  },
-  {
     id: "blow-tr14",
     code: "PT·TR14",
     name: "BLOW TR 14",
     caliber: "9 mm P.A.",
     intents: ["defensa"],
-    image: blowTr14.url,
+    variants: [{ label: "Estándar", image: P("BLOW TR 14.jpeg") }],
     specs: {
       action: "Semi-automática",
       capacity: "14+1",
@@ -107,7 +79,7 @@ export const PRODUCTS: Product[] = [
     name: "BLOW TRZ 914",
     caliber: "9 mm P.A.",
     intents: ["defensa"],
-    image: blowTrz914.url,
+    variants: [{ label: "Estándar", image: P("BLOW TRZ 914.jpeg") }],
     specs: {
       action: "Semi-automática",
       capacity: "14+1",
@@ -117,8 +89,7 @@ export const PRODUCTS: Product[] = [
       material: "Metal Body",
     },
     status: "DISPONIBLE",
-    description:
-      "Compacta metálica con equilibrio óptimo entre peso y capacidad. Ideal EDC.",
+    description: "Compacta metálica con equilibrio óptimo entre peso y capacidad. Ideal EDC.",
   },
   {
     id: "ekol-firat-compact",
@@ -126,18 +97,21 @@ export const PRODUCTS: Product[] = [
     name: "EKOL FIRAT COMPACT",
     caliber: "9 mm P.A.K.",
     intents: ["defensa"],
-    image: ekolFiratCompact.url,
+    variants: [
+      { label: "Negra", image: P("EKOL FIRAT COMPACT NEGRA.jpeg") },
+      { label: "Blanca", image: P("EKOL FIRAT COMPACT BLANCA.jpeg") },
+    ],
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
       barrel: "3.9\"",
-      weight: "950 g",
-      length: "189 mm",
+      weight: "780 g",
+      length: "175 mm",
       material: "Zamak",
     },
     status: "DISPONIBLE",
     description:
-      "Versión compacta de la Firat con capacidad de servicio. Portabilidad óptima para EDC civil.",
+      "Versión compacta de la Firat con capacidad de servicio. Portabilidad óptima para EDC civil. Disponible en acabado negro y blanco.",
   },
   {
     id: "retay-g19c",
@@ -145,12 +119,12 @@ export const PRODUCTS: Product[] = [
     name: "RETAY G19C",
     caliber: "9 mm P.A.",
     intents: ["defensa"],
-    image: retayG19c.url,
+    variants: [{ label: "Estándar", image: P("RETAY G19C.jpeg") }],
     specs: {
       action: "Semi-automática · Striker",
       capacity: "14+1",
       barrel: "4.0\"",
-      weight: "~750 g",
+      weight: "750 g",
       length: "190 mm",
       material: "Aleación metálica",
     },
@@ -158,71 +132,53 @@ export const PRODUCTS: Product[] = [
     description:
       "Referencia striker-fired compacta. Manejo instintivo y rápido despliegue defensivo.",
   },
-  // ---------- TIRO DEPORTIVO ----------
   {
-    id: "retay-xtreme",
-    code: "PT·XTR",
-    name: "RETAY X TREME",
+    id: "ekol-viper-25",
+    code: "PT·V25",
+    name: "EKOL VIPER 2.5\"",
     caliber: "9 mm P.A.",
-    intents: ["deportivo"],
-    image: retayXtreme.url,
+    intents: ["defensa"],
+    variants: [{ label: "Estándar", image: P("EKOL VIPER 2.5.jpeg") }],
     specs: {
-      action: "Semi-automática",
-      capacity: "14+1",
-      barrel: "4.5\"",
-      weight: "740 g",
-      length: "190 mm",
-      material: "Polímero",
+      action: "Revólver · Doble Acción",
+      capacity: "6 tiros",
+      barrel: "2.5\"",
+      weight: "850 g",
+      length: "180 mm",
+      material: "Aleación metálica",
     },
     status: "DISPONIBLE",
     description:
-      "Plataforma deportiva ligera con excelente balance. Rápida recuperación de disparo.",
+      "Revólver traumático compacto de doble acción. Simplicidad mecánica y disuasión inmediata.",
   },
   {
-    id: "retay-xpro",
-    code: "PT·XPR",
-    name: "RETAY X PRO",
+    id: "ekol-viper-30",
+    code: "PT·V30",
+    name: "EKOL VIPER 3.0\"",
     caliber: "9 mm P.A.",
-    intents: ["deportivo"],
-    image: retayXpro.url,
+    intents: ["defensa"],
+    variants: [{ label: "Estándar", image: P("EKOL VIPER 3.0.jpeg") }],
     specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: "4.5\"",
-      weight: "740 g",
-      length: "190 mm",
-      material: "Polímero",
+      action: "Revólver · Doble Acción",
+      capacity: "6 tiros",
+      barrel: "3\"",
+      weight: "730 g",
+      length: "200 mm",
+      material: "Aleación metálica",
     },
     status: "DISPONIBLE",
     description:
-      "Versión Pro de alta capacidad. Precisión y consistencia para práctica intensiva en polígono.",
+      "Revólver traumático de cañón medio. Balance entre portabilidad y control de disparo.",
   },
-  {
-    id: "ekol-nig-211",
-    code: "PT·N211",
-    name: "EKOL NIG 211",
-    caliber: "9 mm P.A.K.",
-    intents: ["deportivo"],
-    image: ekolNig211.url,
-    specs: {
-      action: "Semi-automática",
-      capacity: "14+1",
-      barrel: "3.9\"",
-      weight: "950 g",
-      length: "190 mm",
-      material: "Zamak",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Chasis 1911-style con masa aumentada. Estabilidad y precisión de disparo premium.",
-  },
+
+  /* ---------- TIRO DEPORTIVO ---------- */
   {
     id: "blow-f92",
     code: "PT·F92",
     name: "BLOW F 92",
     caliber: "9 mm P.A.",
     intents: ["deportivo"],
-    image: blowF92.url,
+    variants: [{ label: "Estándar", image: P("BLOW F 92.jpeg") }],
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
@@ -236,12 +192,75 @@ export const PRODUCTS: Product[] = [
       "Plataforma inspirada en la 92 con chasis metálico. Sensación operativa premium.",
   },
   {
+    id: "ekol-firat-magnum",
+    code: "PT·FMG",
+    name: "EKOL FIRAT MAGNUM",
+    caliber: "9 mm P.A.K.",
+    intents: ["deportivo"],
+    variants: [
+      { label: "Negra", image: P("EKOL FIRAT MAGNUM NEGRA.jpeg") },
+      { label: "Blanca", image: P("EKOL FIRAT MAGNUM BLANCA.jpeg") },
+    ],
+    specs: {
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: "4.5\"",
+      weight: "930 g",
+      length: "210 mm",
+      material: "Zamak",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Full size de alta capacidad con masa aumentada para práctica intensiva. Disponible en negro y blanco.",
+  },
+  {
+    id: "ekol-nig-211",
+    code: "PT·N211",
+    name: "EKOL NIG 211",
+    caliber: "9 mm P.A.K.",
+    intents: ["deportivo"],
+    variants: [
+      { label: "Negra", image: P("EKOL NIG 211 NEGRA.jpeg") },
+      { label: "Blanca", image: P("EKOL NIG 211 BLANCA.jpeg") },
+    ],
+    specs: {
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: "3.9\"",
+      weight: "780 g",
+      length: "175 mm",
+      material: "Zamak",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Chasis 1911-style con excelente ergonomía. Estabilidad y precisión de disparo. Dos acabados disponibles.",
+  },
+  {
+    id: "ekol-special-99",
+    code: "PT·S99",
+    name: "EKOL SPECIAL 99 REV-II",
+    caliber: "9 mm P.A.K.",
+    intents: ["deportivo"],
+    variants: [{ label: "Estándar", image: P("EKOL SPECIAL 99 REV-II.jpeg") }],
+    specs: {
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: "4.5\"",
+      weight: "830 g",
+      length: "200 mm",
+      material: "Zamak",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Full size clásica de servicio. Robustez y consistencia para entrenamiento en polígono.",
+  },
+  {
     id: "ekol-viper-45",
     code: "PT·V45",
     name: "EKOL VIPER 4.5\"",
     caliber: "9 mm P.A.",
     intents: ["deportivo"],
-    image: ekolViper45.url,
+    variants: [{ label: "Estándar", image: P("EKOL VIPER 4.5.jpeg") }],
     specs: {
       action: "Revólver · Doble Acción",
       capacity: "6 tiros",
@@ -254,19 +273,96 @@ export const PRODUCTS: Product[] = [
     description:
       "Revólver traumático de cañón largo. Máxima precisión para tiro deportivo y polígono.",
   },
-  // ---------- ENTRENAMIENTO TÁCTICO ----------
+  {
+    id: "retay-g17",
+    code: "PT·G17",
+    name: "RETAY G17",
+    caliber: "9 mm P.A.",
+    intents: ["deportivo"],
+    variants: [{ label: "Estándar", image: P("RETAY G17.jpeg") }],
+    specs: {
+      action: "Semi-automática · Striker",
+      capacity: "17+1",
+      barrel: "4.49\"",
+      weight: "830 g",
+      length: "200 mm",
+      material: "Polímero reforzado",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Full size striker-fired de altísima capacidad. Referencia deportiva por excelencia.",
+  },
+  {
+    id: "retay-s2022",
+    code: "PT·S2022",
+    name: "RETAY S2022",
+    caliber: "9 mm P.A.",
+    intents: ["deportivo"],
+    variants: [{ label: "Estándar", image: P("RETAY S2022.jpeg") }],
+    specs: {
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: "4.5\"",
+      weight: "830 g",
+      length: "200 mm",
+      material: "Polímero reforzado",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Plataforma moderna de servicio con excelente ergonomía y recuperación de disparo.",
+  },
+  {
+    id: "retay-xpro",
+    code: "PT·XPR",
+    name: "RETAY X PRO",
+    caliber: "9 mm P.A.",
+    intents: ["deportivo"],
+    variants: [{ label: "Estándar", image: P("RETAY X PRO.jpeg") }],
+    specs: {
+      action: "Semi-automática",
+      capacity: "15+1",
+      barrel: "4.5\"",
+      weight: "740 g",
+      length: "190 mm",
+      material: "Polímero",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Versión Pro de alta capacidad. Precisión y consistencia para práctica intensiva.",
+  },
+  {
+    id: "retay-xtreme",
+    code: "PT·XTR",
+    name: "RETAY X TREME",
+    caliber: "9 mm P.A.",
+    intents: ["deportivo"],
+    variants: [{ label: "Estándar", image: P("RETAY X TREME.jpeg") }],
+    specs: {
+      action: "Semi-automática",
+      capacity: "14+1",
+      barrel: "4.5\"",
+      weight: "740 g",
+      length: "190 mm",
+      material: "Polímero",
+    },
+    status: "DISPONIBLE",
+    description:
+      "Plataforma deportiva ligera con excelente balance. Rápida recuperación de disparo.",
+  },
+
+  /* ---------- ENTRENAMIENTO TÁCTICO ---------- */
   {
     id: "escopeta-cal12",
     code: "PT·ESC12",
     name: "ESCOPETA CALIBRE 12",
-    caliber: "12 Traumática",
+    caliber: "Cal. 12 Traumática",
     intents: ["tactico"],
-    image: escopetaCal12.url,
+    variants: [{ label: "Estándar", image: P("ESCOPETA CALIBRE 12.jpeg") }],
     specs: {
       action: "Bombeo (Pump-Action)",
       capacity: "5+1",
       barrel: "18\"",
-      weight: "~2.8 kg",
+      weight: "2.8 kg",
       length: "930 mm",
       material: "Polímero alta resistencia",
     },
@@ -280,12 +376,12 @@ export const PRODUCTS: Product[] = [
     name: "FUSIL CALIBRE 9MM",
     caliber: "9 mm",
     intents: ["tactico"],
-    image: fusil9mm.url,
+    variants: [{ label: "Estándar", image: P("FUSIL CALIBRE 9MM.jpeg") }],
     specs: {
       action: "Semi-automático",
       capacity: "Alta capacidad",
       barrel: "10\"",
-      weight: "~3 kg",
+      weight: "3 kg",
       length: "780 mm",
       material: "Polímero alta resistencia",
     },
@@ -299,7 +395,7 @@ export const PRODUCTS: Product[] = [
     name: "EKOL ASI",
     caliber: "9 mm P.A.K.",
     intents: ["tactico"],
-    image: ekolAsi.url,
+    variants: [{ label: "Estándar", image: P("EKOL ASi.jpeg") }],
     specs: {
       action: "Full & Semi Auto",
       capacity: "17+1",
@@ -318,7 +414,7 @@ export const PRODUCTS: Product[] = [
     name: "EKOL JACKAL DUAL MAGNUM",
     caliber: "9 mm P.A.K.",
     intents: ["tactico"],
-    image: ekolJackal.url,
+    variants: [{ label: "Estándar", image: P("EKOL JACKEL DUAL MAGNUM.jpeg") }],
     specs: {
       action: "Semi-automática",
       capacity: "15+1",
@@ -339,6 +435,41 @@ const INTENTS: { id: Intent | "all"; label: string; sub: string }[] = [
   { id: "deportivo", label: "Tiro Deportivo", sub: "IPSC · IDPA" },
   { id: "tactico", label: "Entrenamiento Táctico", sub: "OPERATIVO" },
 ];
+
+/* ---------- Image with ASSET_PENDING fallback ---------- */
+function AssetImage({
+  src,
+  alt,
+  className,
+  loading,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  loading?: "lazy" | "eager";
+}) {
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [src]);
+
+  if (failed) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]">
+        <span className="font-mono-tech text-[9px] tracking-widest text-amber/70">
+          [ ASSET_PENDING ]
+        </span>
+      </div>
+    );
+  }
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading={loading}
+      onError={() => setFailed(true)}
+      className={className}
+    />
+  );
+}
 
 export function Catalog() {
   const [intent, setIntent] = useState<Intent | "all">("all");
@@ -428,11 +559,8 @@ export function Catalog() {
           </div>
         </div>
 
-        {/* Compact Grid: 2 / 3 / 4 */}
-        <motion.div
-          layout
-          className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4"
-        >
+        {/* Compact Grid: 2 mobile / 4 desktop */}
+        <motion.div layout className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
           <AnimatePresence mode="popLayout">
             {filtered.map((p, i) => (
               <ProductCard key={p.id} product={p} index={i} onOpen={() => setDetail(p)} />
@@ -441,7 +569,7 @@ export function Catalog() {
         </motion.div>
 
         {/* Footer note */}
-        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-[color:var(--amber)]/10 pt-6 font-mono-tech text-[10px] text-muted-foreground md:flex-row md:items-center">
+        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-[color:var(--amber)]/10 pt-6 pb-2 font-mono-tech text-[10px] text-muted-foreground md:flex-row md:items-center">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--amber)]/60" />
             ACCESO RESTRINGIDO · MAYORES DE EDAD · COL
@@ -502,12 +630,18 @@ function ProductCard({
             backgroundSize: "20px 20px",
           }}
         />
-        <img
-          src={product.image}
+        <AssetImage
+          src={product.variants[0].image}
           alt={`${product.name} — ${product.caliber}`}
           loading="lazy"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
         />
+
+        {product.variants.length > 1 && (
+          <div className="absolute right-1.5 top-1.5 border border-[color:var(--amber)]/60 bg-black/80 px-1.5 py-0.5 font-mono-tech text-[8px] text-amber">
+            {product.variants.length} COLORES
+          </div>
+        )}
 
         {/* Hover blueprint */}
         <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/80 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -554,6 +688,8 @@ function SpecRow({ k, v }: { k: string; v: string }) {
 
 /* ---------- Detail modal ---------- */
 function ProductDetail({ product, onClose }: { product: Product; onClose: () => void }) {
+  const [variantIndex, setVariantIndex] = useState(0);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
@@ -563,6 +699,8 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
       document.body.style.overflow = "";
     };
   }, [onClose]);
+
+  const variant = product.variants[variantIndex] ?? product.variants[0];
 
   const specRows: [string, string][] = [
     ["Calibre", product.caliber],
@@ -595,34 +733,66 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
         <span className="pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b border-l border-[color:var(--amber)]" />
         <span className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[color:var(--amber)]" />
 
-        {/* Close button - large & tap-friendly */}
+        {/* Close button — large, amber, tap-friendly */}
         <button
           onClick={onClose}
-          className="absolute right-2 top-2 z-20 flex h-11 w-11 items-center justify-center border border-[color:var(--amber)] bg-black/80 text-amber transition-colors hover:bg-[color:var(--amber)] hover:text-primary-foreground md:right-3 md:top-3"
+          className="absolute right-2 top-2 z-20 flex h-11 w-11 items-center justify-center border border-[color:var(--amber)] bg-[color:var(--amber)]/15 text-amber shadow-[0_0_20px_-4px_var(--amber)] transition-colors hover:bg-[color:var(--amber)] hover:text-primary-foreground md:right-3 md:top-3"
           aria-label="Cerrar"
         >
-          <X className="h-5 w-5" strokeWidth={2.5} />
+          <X className="h-6 w-6" strokeWidth={2.5} />
         </button>
 
         {/* Image side */}
-        <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden bg-[#111] p-4 md:aspect-auto md:w-1/2 md:p-8">
-          <div
-            className="pointer-events-none absolute inset-0 opacity-[0.09]"
-            style={{
-              backgroundImage:
-                "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)",
-              backgroundSize: "24px 24px",
-            }}
-          />
-          <img
-            src={product.image}
-            alt={product.name}
-            className="relative z-10 max-h-full max-w-full object-contain"
-          />
+        <div className="relative flex w-full flex-col md:w-1/2">
+          <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden bg-[#111] p-4 md:p-8">
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.09]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)",
+                backgroundSize: "24px 24px",
+              }}
+            />
+            <AssetImage
+              src={variant.image}
+              alt={`${product.name} — ${variant.label}`}
+              className="relative z-10 max-h-full max-w-full object-contain"
+            />
+          </div>
+
+          {product.variants.length > 1 && (
+            <div className="border-t border-[color:var(--amber)]/20 bg-black/60 p-3">
+              <div className="font-mono-tech text-[9px] uppercase tracking-widest text-amber/80">
+                Acabados disponibles
+              </div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {product.variants.map((v, i) => (
+                  <button
+                    key={v.label}
+                    onClick={() => setVariantIndex(i)}
+                    className={`flex items-center gap-2 border px-2.5 py-1.5 font-mono-tech text-[10px] uppercase tracking-wider transition-all ${
+                      i === variantIndex
+                        ? "border-[color:var(--amber)] bg-[color:var(--amber)]/15 text-amber"
+                        : "border-[color:var(--amber)]/30 text-muted-foreground hover:border-[color:var(--amber)]/70"
+                    }`}
+                  >
+                    <span className="relative h-8 w-8 overflow-hidden border border-[color:var(--amber)]/20 bg-[#1A1A1A]">
+                      <AssetImage
+                        src={v.image}
+                        alt={v.label}
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                    </span>
+                    {v.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Info side */}
-        <div className="flex w-full flex-col md:w-1/2">
+        <div className="flex w-full flex-col border-t border-[color:var(--amber)]/20 md:w-1/2 md:border-l md:border-t-0">
           <div className="flex items-center justify-between border-b border-[color:var(--amber)]/20 px-4 py-2.5 pr-14 font-mono-tech text-[10px] md:px-6">
             <span className="text-amber">{product.code}</span>
             <span className="flex items-center gap-1.5 text-amber">
