@@ -4,12 +4,12 @@ import { Link } from "@tanstack/react-router";
 import { AlertTriangle, Wrench, ScrollText, ShieldCheck, FileCheck, Fingerprint, Search, FileText, PackageCheck, MessageCircle, Instagram, Lock, Target, Droplet, Crosshair, MapPin } from "lucide-react";
 import { WHATSAPP_URL } from "@/components/Catalog";
 
-import prueba1 from "@/assets/videos/prueba_1.mp4.asset.json";
-import prueba2 from "@/assets/videos/prueba_2.mp4.asset.json";
-import prueba3 from "@/assets/videos/prueba_3.mp4.asset.json";
-import prueba4 from "@/assets/videos/prueba_4.mp4.asset.json";
-import mantenimientoVid from "@/assets/videos/mantiniemiento.mp4.asset.json";
-import ubicacionVid from "@/assets/videos/ubicacion.mp4.asset.json";
+const VIDEOS = {
+  disparos: ["/DISPAROS.mp4", "/DISPAROS%20(2).mp4", "/DISPAROS%20(3).mp4", "/DISPAROS%20(4).mp4"],
+  mantenimiento: "/mantenimiento.mp4",
+  ubicacion: "/ubicacion.mp4",
+};
+
 
 const WA_CONTACTO = "https://wa.me/573027104931?text=Hola%20Punto%20T%C3%A1ctico,%20solicito%20asesor%C3%ADa%20para%20adquisici%C3%B3n";
 
