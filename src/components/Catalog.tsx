@@ -58,12 +58,14 @@ function AssetImage({
 }
 
 export function Catalog() {
+  const products = useCatalog();
   const [intent, setIntent] = useState<Intent | "all">("all");
-  const [detail, setDetail] = useState<Product | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(null);
+  const detail = products.find((p) => p.id === detailId) ?? null;
 
   const filtered = useMemo(
-    () => (intent === "all" ? PRODUCTS : PRODUCTS.filter((p) => p.intents.includes(intent))),
-    [intent],
+    () => (intent === "all" ? products : products.filter((p) => p.intents.includes(intent))),
+    [intent, products],
   );
 
   return (
@@ -86,7 +88,7 @@ export function Catalog() {
             [SYS.INV.ONLINE]
             <span className="h-px flex-1 max-w-24 bg-[color:var(--amber)]/40" />
             <span className="text-muted-foreground">
-              {String(filtered.length).padStart(2, "0")} / {String(PRODUCTS.length).padStart(2, "0")}
+              {String(filtered.length).padStart(2, "0")} / {String(products.length).padStart(2, "0")}
             </span>
           </div>
 
@@ -149,7 +151,7 @@ export function Catalog() {
         <motion.div layout className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
           <AnimatePresence mode="popLayout">
             {filtered.map((p, i) => (
-              <ProductCard key={p.id} product={p} index={i} onOpen={() => setDetail(p)} />
+              <ProductCard key={p.id} product={p} index={i} onOpen={() => setDetailId(p.id)} />
             ))}
           </AnimatePresence>
         </motion.div>
@@ -165,7 +167,7 @@ export function Catalog() {
       </div>
 
       <AnimatePresence>
-        {detail && <ProductDetail product={detail} onClose={() => setDetail(null)} />}
+        {detail && <ProductDetail product={detail} onClose={() => setDetailId(null)} />}
       </AnimatePresence>
     </section>
   );
@@ -419,7 +421,7 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
 
           <div className="border-t border-[color:var(--amber)]/20 bg-black/60 p-3 md:p-4">
             <a
-              href={WHATSAPP_URL}
+              href={whatsappForProduct(product.name, product.variants.length > 1 ? variant.label : undefined)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between border border-[color:var(--amber)] bg-[color:var(--amber)]/10 px-4 py-3 font-mono-tech text-[11px] uppercase tracking-wider text-amber transition-all hover:bg-[color:var(--amber)] hover:text-primary-foreground"
