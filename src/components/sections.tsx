@@ -8,6 +8,7 @@ const VIDEOS = {
   disparos: ["/DISPAROS.mp4", "/DISPAROS%20(2).mp4", "/DISPAROS%20(3).mp4", "/DISPAROS%20(4).mp4"],
   mantenimiento: "/mantenimiento.mp4",
   ubicacion: "/ubicacion.mp4",
+  municion: "/municion.mp4",
 };
 
 
@@ -337,6 +338,39 @@ export function Poligono() {
             </motion.div>
           ))}
         </div>
+
+        {/* Sub-sección: Rendimiento Balístico */}
+        <div className="mt-16 border-t border-[color:var(--amber)]/15 pt-10">
+          <div className="mb-6 max-w-2xl space-y-3">
+            <div className="font-mono-tech text-[10px] uppercase tracking-[0.3em] text-amber/80">
+              [ RENDIMIENTO BALÍSTICO ]
+            </div>
+            <h3 className="font-display text-2xl font-bold uppercase tracking-wide text-foreground md:text-3xl">
+              Munición <span className="text-amber">9mm P.A.</span>
+            </h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Registro del comportamiento de la munición traumática homologada en banco de pruebas.
+            </p>
+          </div>
+
+          <div className="relative mx-auto max-w-2xl border border-[color:var(--amber)] bg-black shadow-[0_0_40px_-12px_rgba(245,166,35,0.45)]">
+            <div className="flex items-center justify-between border-b border-[color:var(--amber)]/40 px-3 py-1.5 font-mono-tech text-[9px] text-amber/80">
+              <span>REC · MUNICIÓN</span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 animate-hud-pulse rounded-full bg-[color:var(--amber)]" />
+                BALÍSTICA
+              </span>
+            </div>
+            <video
+              src={VIDEOS.municion}
+              controls
+              muted
+              playsInline
+              preload="metadata"
+              className="block aspect-video w-full bg-black object-cover"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -438,7 +472,7 @@ export function Contacto() {
             </span>
             <span className="flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 animate-hud-pulse rounded-full bg-[color:var(--amber)]" />
-              PEREIRA · CO
+              PALMIRA · VALLE
             </span>
           </div>
           <video
@@ -452,7 +486,7 @@ export function Contacto() {
         </div>
 
         <p className="mx-auto mt-8 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-          Sede Operativa: Pereira, Colombia. Atención exclusiva previa verificación de perfil.
+          Sede Operativa: Palmira - Valle. Atención exclusiva previa verificación de perfil.
         </p>
 
         <div className="mt-8 flex flex-col items-center gap-3">

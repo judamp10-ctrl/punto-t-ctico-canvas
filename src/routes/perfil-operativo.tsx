@@ -21,7 +21,14 @@ import {
   Inbox,
 } from "lucide-react";
 import { BulletsBackground } from "@/components/BulletsBackground";
-import { PRODUCTS } from "@/components/Catalog";
+import {
+  useCatalog,
+  upsertProduct,
+  deleteProduct,
+  resetCatalog,
+  type Product,
+  type Intent,
+} from "@/lib/products";
 
 export const Route = createFileRoute("/perfil-operativo")({
   head: () => ({
@@ -477,11 +484,188 @@ function EmptyState({ title, subtitle }: { title: string; subtitle: string }) {
 }
 
 /* ---------- Panels ---------- */
+const EMPTY_FORM = {
+  id: "",
+  code: "",
+  name: "",
+  caliber: "",
+  intents: "defensa" as Intent,
+  action: "",
+  capacity: "",
+  barrel: "",
+  weight: "",
+  length: "",
+  material: "",
+  status: "DISPONIBLE" as Product["status"],
+  description: "",
+  variants: "",
+};
+
+type FormState = typeof EMPTY_FORM;
+
+function toForm(p: Product): FormState {
+  return {
+    id: p.id,
+    code: p.code,
+    name: p.name,
+    caliber: p.caliber,
+    intents: (p.intents[0] ?? "defensa") as Intent,
+    action: p.specs.action,
+    capacity: p.specs.capacity,
+    barrel: p.specs.barrel,
+    weight: p.specs.weight,
+    length: p.specs.length,
+    material: p.specs.material,
+    status: p.status,
+    description: p.description,
+    variants: p.variants.map((v) => `${v.label}|${v.image}`).join("\n"),
+  };
+}
+
+function fromForm(f: FormState): Product {
+  const variants = f.variants
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [label, ...rest] = line.split("|");
+      return { label: (label ?? "Estándar").trim(), image: rest.join("|").trim() };
+    });
+  return {
+    id: f.id || f.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || `sku-${Date.now()}`,
+    code: f.code || "PT·NEW",
+    name: f.name,
+    caliber: f.caliber,
+    intents: [f.intents],
+    variants: variants.length ? variants : [{ label: "Estándar", image: "" }],
+    specs: {
+      action: f.action,
+      capacity: f.capacity,
+      barrel: f.barrel,
+      weight: f.weight,
+      length: f.length,
+      material: f.material,
+    },
+    status: f.status,
+    description: f.description,
+  };
+}
+
+function Field({
+  label,
+  value,
+  onChange,
+  textarea,
+  placeholder,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  textarea?: boolean;
+  placeholder?: string;
+}) {
+  const cls =
+    "w-full border border-[color:var(--amber)]/30 bg-black/60 px-3 py-2 font-mono-tech text-[11px] text-foreground outline-none transition-colors focus:border-[color:var(--amber)]";
+  return (
+    <label className="block space-y-1">
+      <span className="font-mono-tech text-[9px] uppercase tracking-widest text-amber/80">{label}</span>
+      {textarea ? (
+        <textarea rows={3} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} className={cls} />
+      ) : (
+        <input value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} className={cls} />
+      )}
+    </label>
+  );
+}
+
+function ProductForm({
+  initial,
+  onCancel,
+  onSave,
+}: {
+  initial: FormState;
+  onCancel: () => void;
+  onSave: (p: Product) => void;
+}) {
+  const [f, setF] = useState<FormState>(initial);
+  const set = (k: keyof FormState) => (v: string) => setF((prev) => ({ ...prev, [k]: v }));
+
+  return (
+    <div className="border border-[color:var(--amber)]/40 bg-black/60 p-5 backdrop-blur">
+      <div className="mb-4 font-mono-tech text-[10px] uppercase tracking-widest text-amber">
+        {initial.id ? `Editar / ${initial.name}` : "Registrar Armamento"}
+      </div>
+      <div className="grid gap-4 md:grid-cols-3">
+        <Field label="Modelo" value={f.name} onChange={set("name")} placeholder="EKOL VIPER 3.0" />
+        <Field label="SKU" value={f.code} onChange={set("code")} placeholder="PT·V30" />
+        <Field label="Calibre" value={f.caliber} onChange={set("caliber")} placeholder="9 mm P.A." />
+        <label className="block space-y-1">
+          <span className="font-mono-tech text-[9px] uppercase tracking-widest text-amber/80">Categoría</span>
+          <select
+            value={f.intents}
+            onChange={(e) => setF((prev) => ({ ...prev, intents: e.target.value as Intent }))}
+            className="w-full border border-[color:var(--amber)]/30 bg-black/60 px-3 py-2 font-mono-tech text-[11px] text-foreground outline-none focus:border-[color:var(--amber)]"
+          >
+            <option value="defensa">Defensa Personal</option>
+            <option value="deportivo">Tiro Deportivo</option>
+            <option value="tactico">Entrenamiento Táctico</option>
+          </select>
+        </label>
+        <label className="block space-y-1">
+          <span className="font-mono-tech text-[9px] uppercase tracking-widest text-amber/80">Estado</span>
+          <select
+            value={f.status}
+            onChange={(e) => setF((prev) => ({ ...prev, status: e.target.value as Product["status"] }))}
+            className="w-full border border-[color:var(--amber)]/30 bg-black/60 px-3 py-2 font-mono-tech text-[11px] text-foreground outline-none focus:border-[color:var(--amber)]"
+          >
+            <option value="DISPONIBLE">DISPONIBLE</option>
+            <option value="BAJO CONSULTA">BAJO CONSULTA</option>
+            <option value="LISTA DE ESPERA">LISTA DE ESPERA</option>
+          </select>
+        </label>
+        <Field label="Acción" value={f.action} onChange={set("action")} placeholder="Semi-automática" />
+        <Field label="Capacidad" value={f.capacity} onChange={set("capacity")} placeholder="15+1" />
+        <Field label="Cañón" value={f.barrel} onChange={set("barrel")} placeholder='4.5"' />
+        <Field label="Peso" value={f.weight} onChange={set("weight")} placeholder="850 g" />
+        <Field label="Longitud" value={f.length} onChange={set("length")} placeholder="200 mm" />
+        <Field label="Material" value={f.material} onChange={set("material")} placeholder="Zamak" />
+      </div>
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <Field
+          label="Variantes (Etiqueta|/ruta-imagen.jpeg — una por línea)"
+          value={f.variants}
+          onChange={set("variants")}
+          textarea
+          placeholder={"Negra|/EKOL VIPER 3.0 NEGRA.jpeg\nBlanca|/EKOL VIPER 3.0.jpeg"}
+        />
+        <Field label="Descripción" value={f.description} onChange={set("description")} textarea />
+      </div>
+      <div className="mt-5 flex gap-2">
+        <button
+          onClick={() => f.name.trim() && onSave(fromForm(f))}
+          className="inline-flex items-center gap-2 border border-[color:var(--amber)] bg-[color:var(--amber)] px-4 py-2 font-mono-tech text-[11px] uppercase tracking-wider text-primary-foreground transition-all hover:shadow-[0_0_25px_rgba(245,166,35,0.45)]"
+        >
+          Guardar
+        </button>
+        <button
+          onClick={onCancel}
+          className="inline-flex items-center gap-2 border border-[color:var(--amber)]/40 px-4 py-2 font-mono-tech text-[11px] uppercase tracking-wider text-amber transition-all hover:border-[color:var(--amber)]"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function ProductosPanel() {
+  const products = useCatalog();
+  const [form, setForm] = useState<FormState | null>(null);
+
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-4">
-        <MetricCard label="SKUs Activos" value={String(PRODUCTS.length).padStart(2, "0")} delta="Catálogo inicial" icon={Package} />
+        <MetricCard label="SKUs Activos" value={String(products.length).padStart(2, "0")} delta="Catálogo dinámico" icon={Package} />
         <MetricCard label="Equipos Despachados" value="00" delta="Sin ventas registradas" icon={TrendingUp} />
         <MetricCard label="Trámites Pendientes" value="00" delta="Bandeja limpia" icon={Clock} />
         <MetricCard label="Stock Crítico" value="00" delta="Todo abastecido" icon={Activity} />
@@ -492,34 +676,64 @@ function ProductosPanel() {
           Registro / Armamento Traumático
         </div>
         <div className="flex gap-2">
-          <ActionBtn>Exportar CSV</ActionBtn>
-          <ActionBtn primary icon={Plus}>Registrar Armamento</ActionBtn>
+          <button
+            onClick={() => {
+              if (confirm("¿Restaurar el catálogo original?")) resetCatalog();
+            }}
+            className="inline-flex items-center gap-2 border border-[color:var(--amber)]/40 px-4 py-2 font-mono-tech text-[11px] uppercase tracking-wider text-amber transition-all hover:border-[color:var(--amber)] hover:bg-[color:var(--amber)]/10"
+          >
+            Restaurar Catálogo
+          </button>
+          <button
+            onClick={() => setForm({ ...EMPTY_FORM })}
+            className="inline-flex items-center gap-2 border border-[color:var(--amber)] bg-[color:var(--amber)] px-4 py-2 font-mono-tech text-[11px] uppercase tracking-wider text-primary-foreground transition-all hover:shadow-[0_0_25px_rgba(245,166,35,0.45)]"
+          >
+            <Plus className="h-3.5 w-3.5" strokeWidth={1.6} />
+            Registrar Armamento
+          </button>
         </div>
       </div>
 
+      {form && (
+        <ProductForm
+          key={form.id || "new"}
+          initial={form}
+          onCancel={() => setForm(null)}
+          onSave={(p) => {
+            upsertProduct(p);
+            setForm(null);
+          }}
+        />
+      )}
+
       <DataTable
-        headers={["SKU", "Modelo", "Calibre", "Acción", "Capacidad", "Stock", "Estado", "Acciones"]}
-        rows={PRODUCTS.map((p) => [
+        headers={["SKU", "Modelo", "Calibre", "Acción", "Capacidad", "Variantes", "Estado", "Acciones"]}
+        rows={products.map((p) => [
           p.code,
           <span className="text-foreground">{p.name}</span>,
           p.caliber,
           p.specs.action,
           p.specs.capacity,
-          "00",
-          <StatusPill tone="warn">Sin stock</StatusPill>,
-          <RowActions />,
+          p.variants.map((v) => v.label).join(" · "),
+          <StatusPill tone={p.status === "DISPONIBLE" ? "ok" : "warn"}>{p.status}</StatusPill>,
+          <RowActions
+            onEdit={() => setForm(toForm(p))}
+            onDelete={() => {
+              if (confirm(`¿Eliminar ${p.name} del catálogo?`)) deleteProduct(p.id);
+            }}
+          />,
         ])}
       />
     </div>
   );
 }
 
-function RowActions() {
+function RowActions({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => void }) {
   return (
     <div className="flex gap-2 text-[10px] uppercase tracking-widest">
-      <button className="text-amber hover:underline">Editar</button>
+      <button onClick={onEdit} className="text-amber hover:underline">Editar</button>
       <span className="text-muted-foreground/40">·</span>
-      <button className="text-muted-foreground hover:text-destructive">Eliminar</button>
+      <button onClick={onDelete} className="text-muted-foreground hover:text-destructive">Eliminar</button>
     </div>
   );
 }
@@ -550,6 +764,7 @@ function InventarioPanel() {
 }
 
 function CategoriasPanel() {
+  const PRODUCTS = useCatalog();
   const counts = {
     defensa: PRODUCTS.filter((p) => p.intents.includes("defensa")).length,
     deportivo: PRODUCTS.filter((p) => p.intents.includes("deportivo")).length,

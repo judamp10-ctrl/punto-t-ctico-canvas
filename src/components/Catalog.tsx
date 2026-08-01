@@ -1,433 +1,19 @@
 import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X } from "lucide-react";
+import {
+  DEFAULT_PRODUCTS,
+  useCatalog,
+  WHATSAPP_URL,
+  whatsappForProduct,
+  type Intent,
+  type Product,
+  type ProductVariant,
+} from "@/lib/products";
 
-type Intent = "defensa" | "deportivo" | "tactico";
-
-export interface ProductVariant {
-  label: string;
-  image: string;
-}
-
-export interface Product {
-  id: string;
-  code: string;
-  name: string;
-  caliber: string;
-  intents: Intent[];
-  variants: ProductVariant[];
-  specs: {
-    action: string;
-    capacity: string;
-    barrel: string;
-    weight: string;
-    length: string;
-    material: string;
-  };
-  status: "DISPONIBLE" | "BAJO CONSULTA" | "LISTA DE ESPERA";
-  description: string;
-}
-
-export const WHATSAPP_URL =
-  "https://wa.me/573027104931?text=Hola%20Punto%20T%C3%A1ctico,%20solicito%20asesor%C3%ADa%20para%20adquisici%C3%B3n";
-
-const P = (file: string) => `/${encodeURIComponent(file)}`;
-
-export const PRODUCTS: Product[] = [
-  /* ---------- DEFENSA PERSONAL ---------- */
-  {
-    id: "blow-mini-9",
-    code: "PT·BM9",
-    name: "BLOW MINI 9",
-    caliber: "9 mm P.A.",
-    intents: ["defensa"],
-    variants: [{ label: "Estándar", image: P("BLOW MINI 9.jpeg") }],
-    specs: {
-      action: "Semi-automática",
-      capacity: "6+1",
-      barrel: "86 mm",
-      weight: "550 g",
-      length: "154 mm",
-      material: "Polímero alta resistencia",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Pistola traumática ultra-compacta para porte encubierto. Diseño discreto y confiable sin sacrificar potencia.",
-  },
-  {
-    id: "blow-tr14",
-    code: "PT·TR14",
-    name: "BLOW TR 14",
-    caliber: "9 mm P.A.",
-    intents: ["defensa"],
-    variants: [{ label: "Estándar", image: P("BLOW TR 14.jpeg") }],
-    specs: {
-      action: "Semi-automática",
-      capacity: "14+1",
-      barrel: "4.1\"",
-      weight: "850 g",
-      length: "186 mm",
-      material: "Aleación metálica",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Plataforma metálica de servicio para portador civil. Alta capacidad y precisión mecánica.",
-  },
-  {
-    id: "blow-trz914",
-    code: "PT·TZ914",
-    name: "BLOW TRZ 914",
-    caliber: "9 mm P.A.",
-    intents: ["defensa"],
-    variants: [{ label: "Estándar", image: P("BLOW TRZ 914.jpeg") }],
-    specs: {
-      action: "Semi-automática",
-      capacity: "14+1",
-      barrel: "3.9\"",
-      weight: "730 g",
-      length: "160 mm",
-      material: "Metal Body",
-    },
-    status: "DISPONIBLE",
-    description: "Compacta metálica con equilibrio óptimo entre peso y capacidad. Ideal EDC.",
-  },
-  {
-    id: "ekol-firat-compact",
-    code: "PT·FC9",
-    name: "EKOL FIRAT COMPACT",
-    caliber: "9 mm P.A.K.",
-    intents: ["defensa"],
-    variants: [
-      { label: "Negra", image: P("EKOL FIRAT COMPACT NEGRA.jpeg") },
-      { label: "Blanca", image: P("EKOL FIRAT COMPACT BLANCA.jpeg") },
-    ],
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: "3.9\"",
-      weight: "780 g",
-      length: "175 mm",
-      material: "Zamak",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Versión compacta de la Firat con capacidad de servicio. Portabilidad óptima para EDC civil. Disponible en acabado negro y blanco.",
-  },
-  {
-    id: "retay-g19c",
-    code: "PT·G19C",
-    name: "RETAY G19C",
-    caliber: "9 mm P.A.",
-    intents: ["defensa"],
-    variants: [{ label: "Estándar", image: P("RETAY G19C.jpeg") }],
-    specs: {
-      action: "Semi-automática · Striker",
-      capacity: "14+1",
-      barrel: "4.0\"",
-      weight: "750 g",
-      length: "190 mm",
-      material: "Aleación metálica",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Referencia striker-fired compacta. Manejo instintivo y rápido despliegue defensivo.",
-  },
-  {
-    id: "ekol-viper-25",
-    code: "PT·V25",
-    name: "EKOL VIPER 2.5\"",
-    caliber: "9 mm P.A.",
-    intents: ["defensa"],
-    variants: [{ label: "Estándar", image: P("EKOL VIPER 2.5.jpeg") }],
-    specs: {
-      action: "Revólver · Doble Acción",
-      capacity: "6 tiros",
-      barrel: "2.5\"",
-      weight: "850 g",
-      length: "180 mm",
-      material: "Aleación metálica",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Revólver traumático compacto de doble acción. Simplicidad mecánica y disuasión inmediata.",
-  },
-  {
-    id: "ekol-viper-30",
-    code: "PT·V30",
-    name: "EKOL VIPER 3.0\"",
-    caliber: "9 mm P.A.",
-    intents: ["defensa"],
-    variants: [{ label: "Estándar", image: P("EKOL VIPER 3.0.jpeg") }],
-    specs: {
-      action: "Revólver · Doble Acción",
-      capacity: "6 tiros",
-      barrel: "3\"",
-      weight: "730 g",
-      length: "200 mm",
-      material: "Aleación metálica",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Revólver traumático de cañón medio. Balance entre portabilidad y control de disparo.",
-  },
-
-  /* ---------- TIRO DEPORTIVO ---------- */
-  {
-    id: "blow-f92",
-    code: "PT·F92",
-    name: "BLOW F 92",
-    caliber: "9 mm P.A.",
-    intents: ["deportivo"],
-    variants: [{ label: "Estándar", image: P("BLOW F 92.jpeg") }],
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: "4.5\"",
-      weight: "950 g",
-      length: "210 mm",
-      material: "Metal Body",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Plataforma inspirada en la 92 con chasis metálico. Sensación operativa premium.",
-  },
-  {
-    id: "ekol-firat-magnum",
-    code: "PT·FMG",
-    name: "EKOL FIRAT MAGNUM",
-    caliber: "9 mm P.A.K.",
-    intents: ["deportivo"],
-    variants: [
-      { label: "Negra", image: P("EKOL FIRAT MAGNUM NEGRA.jpeg") },
-      { label: "Blanca", image: P("EKOL FIRAT MAGNUM BLANCA.jpeg") },
-    ],
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: "4.5\"",
-      weight: "930 g",
-      length: "210 mm",
-      material: "Zamak",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Full size de alta capacidad con masa aumentada para práctica intensiva. Disponible en negro y blanco.",
-  },
-  {
-    id: "ekol-nig-211",
-    code: "PT·N211",
-    name: "EKOL NIG 211",
-    caliber: "9 mm P.A.K.",
-    intents: ["deportivo"],
-    variants: [
-      { label: "Negra", image: P("EKOL NIG 211 NEGRA.jpeg") },
-      { label: "Blanca", image: P("EKOL NIG 211 BLANCA.jpeg") },
-    ],
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: "3.9\"",
-      weight: "780 g",
-      length: "175 mm",
-      material: "Zamak",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Chasis 1911-style con excelente ergonomía. Estabilidad y precisión de disparo. Dos acabados disponibles.",
-  },
-  {
-    id: "ekol-special-99",
-    code: "PT·S99",
-    name: "EKOL SPECIAL 99 REV-II",
-    caliber: "9 mm P.A.K.",
-    intents: ["deportivo"],
-    variants: [{ label: "Estándar", image: P("EKOL SPECIAL 99 REV-II.jpeg") }],
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: "4.5\"",
-      weight: "830 g",
-      length: "200 mm",
-      material: "Zamak",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Full size clásica de servicio. Robustez y consistencia para entrenamiento en polígono.",
-  },
-  {
-    id: "ekol-viper-45",
-    code: "PT·V45",
-    name: "EKOL VIPER 4.5\"",
-    caliber: "9 mm P.A.",
-    intents: ["deportivo"],
-    variants: [{ label: "Estándar", image: P("EKOL VIPER 4.5.jpeg") }],
-    specs: {
-      action: "Revólver · Doble Acción",
-      capacity: "6 tiros",
-      barrel: "4.5\"",
-      weight: "980 g",
-      length: "245 mm",
-      material: "Aleación metálica",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Revólver traumático de cañón largo. Máxima precisión para tiro deportivo y polígono.",
-  },
-  {
-    id: "retay-g17",
-    code: "PT·G17",
-    name: "RETAY G17",
-    caliber: "9 mm P.A.",
-    intents: ["deportivo"],
-    variants: [{ label: "Estándar", image: P("RETAY G17.jpeg") }],
-    specs: {
-      action: "Semi-automática · Striker",
-      capacity: "17+1",
-      barrel: "4.49\"",
-      weight: "830 g",
-      length: "200 mm",
-      material: "Polímero reforzado",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Full size striker-fired de altísima capacidad. Referencia deportiva por excelencia.",
-  },
-  {
-    id: "retay-s2022",
-    code: "PT·S2022",
-    name: "RETAY S2022",
-    caliber: "9 mm P.A.",
-    intents: ["deportivo"],
-    variants: [{ label: "Estándar", image: P("RETAY S2022.jpeg") }],
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: "4.5\"",
-      weight: "830 g",
-      length: "200 mm",
-      material: "Polímero reforzado",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Plataforma moderna de servicio con excelente ergonomía y recuperación de disparo.",
-  },
-  {
-    id: "retay-xpro",
-    code: "PT·XPR",
-    name: "RETAY X PRO",
-    caliber: "9 mm P.A.",
-    intents: ["deportivo"],
-    variants: [{ label: "Estándar", image: P("RETAY X PRO.jpeg") }],
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: "4.5\"",
-      weight: "740 g",
-      length: "190 mm",
-      material: "Polímero",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Versión Pro de alta capacidad. Precisión y consistencia para práctica intensiva.",
-  },
-  {
-    id: "retay-xtreme",
-    code: "PT·XTR",
-    name: "RETAY X TREME",
-    caliber: "9 mm P.A.",
-    intents: ["deportivo"],
-    variants: [{ label: "Estándar", image: P("RETAY X TREME.jpeg") }],
-    specs: {
-      action: "Semi-automática",
-      capacity: "14+1",
-      barrel: "4.5\"",
-      weight: "740 g",
-      length: "190 mm",
-      material: "Polímero",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Plataforma deportiva ligera con excelente balance. Rápida recuperación de disparo.",
-  },
-
-  /* ---------- ENTRENAMIENTO TÁCTICO ---------- */
-  {
-    id: "escopeta-cal12",
-    code: "PT·ESC12",
-    name: "ESCOPETA CALIBRE 12",
-    caliber: "Cal. 12 Traumática",
-    intents: ["tactico"],
-    variants: [{ label: "Estándar", image: P("ESCOPETA CALIBRE 12.jpeg") }],
-    specs: {
-      action: "Bombeo (Pump-Action)",
-      capacity: "5+1",
-      barrel: "18\"",
-      weight: "2.8 kg",
-      length: "930 mm",
-      material: "Polímero alta resistencia",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Escopeta táctica calibre 12 traumática. Máxima disuasión con acción de bombeo confiable.",
-  },
-  {
-    id: "fusil-9mm",
-    code: "PT·F9",
-    name: "FUSIL CALIBRE 9MM",
-    caliber: "9 mm",
-    intents: ["tactico"],
-    variants: [{ label: "Estándar", image: P("FUSIL CALIBRE 9MM.jpeg") }],
-    specs: {
-      action: "Semi-automático",
-      capacity: "Alta capacidad",
-      barrel: "10\"",
-      weight: "3 kg",
-      length: "780 mm",
-      material: "Polímero alta resistencia",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Fusil semi-automático 9mm con cargadores de alta capacidad. Plataforma modular de entrenamiento táctico.",
-  },
-  {
-    id: "ekol-asi",
-    code: "PT·ASI",
-    name: "EKOL ASI",
-    caliber: "9 mm P.A.K.",
-    intents: ["tactico"],
-    variants: [{ label: "Estándar", image: P("EKOL ASi.jpeg") }],
-    specs: {
-      action: "Full & Semi Auto",
-      capacity: "17+1",
-      barrel: "5.5\"",
-      weight: "2100 g",
-      length: "485 mm",
-      material: "Aleación / Polímero",
-    },
-    status: "BAJO CONSULTA",
-    description:
-      "Subfusil traumático de selección full/semi auto. Plataforma operativa premium para entrenamiento táctico avanzado.",
-  },
-  {
-    id: "ekol-jackal",
-    code: "PT·JKM",
-    name: "EKOL JACKAL DUAL MAGNUM",
-    caliber: "9 mm P.A.K.",
-    intents: ["tactico"],
-    variants: [{ label: "Estándar", image: P("EKOL JACKEL DUAL MAGNUM.jpeg") }],
-    specs: {
-      action: "Semi-automática",
-      capacity: "15+1",
-      barrel: "5.0\"",
-      weight: "1050 g",
-      length: "220 mm",
-      material: "Zamak",
-    },
-    status: "DISPONIBLE",
-    description:
-      "Plataforma reforzada Dual Magnum con masa aumentada. Reducción de retroceso y desempeño táctico.",
-  },
-];
+export type { Intent, Product, ProductVariant };
+export { WHATSAPP_URL, whatsappForProduct };
+export const PRODUCTS = DEFAULT_PRODUCTS;
 
 const INTENTS: { id: Intent | "all"; label: string; sub: string }[] = [
   { id: "all", label: "Todos", sub: "INVENTARIO COMPLETO" },
@@ -472,12 +58,14 @@ function AssetImage({
 }
 
 export function Catalog() {
+  const products = useCatalog();
   const [intent, setIntent] = useState<Intent | "all">("all");
-  const [detail, setDetail] = useState<Product | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(null);
+  const detail = products.find((p) => p.id === detailId) ?? null;
 
   const filtered = useMemo(
-    () => (intent === "all" ? PRODUCTS : PRODUCTS.filter((p) => p.intents.includes(intent))),
-    [intent],
+    () => (intent === "all" ? products : products.filter((p) => p.intents.includes(intent))),
+    [intent, products],
   );
 
   return (
@@ -500,7 +88,7 @@ export function Catalog() {
             [SYS.INV.ONLINE]
             <span className="h-px flex-1 max-w-24 bg-[color:var(--amber)]/40" />
             <span className="text-muted-foreground">
-              {String(filtered.length).padStart(2, "0")} / {String(PRODUCTS.length).padStart(2, "0")}
+              {String(filtered.length).padStart(2, "0")} / {String(products.length).padStart(2, "0")}
             </span>
           </div>
 
@@ -563,7 +151,7 @@ export function Catalog() {
         <motion.div layout className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
           <AnimatePresence mode="popLayout">
             {filtered.map((p, i) => (
-              <ProductCard key={p.id} product={p} index={i} onOpen={() => setDetail(p)} />
+              <ProductCard key={p.id} product={p} index={i} onOpen={() => setDetailId(p.id)} />
             ))}
           </AnimatePresence>
         </motion.div>
@@ -579,7 +167,7 @@ export function Catalog() {
       </div>
 
       <AnimatePresence>
-        {detail && <ProductDetail product={detail} onClose={() => setDetail(null)} />}
+        {detail && <ProductDetail product={detail} onClose={() => setDetailId(null)} />}
       </AnimatePresence>
     </section>
   );
@@ -833,7 +421,7 @@ function ProductDetail({ product, onClose }: { product: Product; onClose: () => 
 
           <div className="border-t border-[color:var(--amber)]/20 bg-black/60 p-3 md:p-4">
             <a
-              href={WHATSAPP_URL}
+              href={whatsappForProduct(product.name, product.variants.length > 1 ? variant.label : undefined)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between border border-[color:var(--amber)] bg-[color:var(--amber)]/10 px-4 py-3 font-mono-tech text-[11px] uppercase tracking-wider text-amber transition-all hover:bg-[color:var(--amber)] hover:text-primary-foreground"

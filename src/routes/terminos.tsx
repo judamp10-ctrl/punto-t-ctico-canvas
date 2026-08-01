@@ -93,7 +93,7 @@ function Terminos() {
             <h2 className="mb-3 text-lg font-bold uppercase tracking-wide text-foreground">7. Contacto</h2>
             <p>
               Cualquier inquietud sobre estos términos debe canalizarse por WhatsApp al <span className="text-amber">+57 302-710-4931</span>{" "}
-              o consultar directamente con nuestra sede operativa en Pereira, Colombia.
+              o consultar directamente con nuestra sede operativa en Palmira - Valle.
             </p>
           </section>
         </div>

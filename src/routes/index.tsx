@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Punto Táctico — Armería Traumática Legal · Colombia" },
-      { name: "description", content: "Inventario operativo de armas traumáticas 9mm P.A., escopetas y fusiles. Registro legal Indumil. Pereira, Colombia." },
+      { name: "description", content: "Inventario operativo de armas traumáticas 9mm P.A., escopetas y fusiles. Registro legal Indumil. Palmira - Valle, Colombia." },
       { property: "og:title", content: "Punto Táctico — Tactical Division CO" },
       { property: "og:description", content: "Inventario operativo. Trámite legal. Respaldo Indumil." },
       { property: "og:type", content: "website" },
