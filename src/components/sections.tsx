@@ -589,12 +589,11 @@ export function SiteFooter() {
 
           <div>
             <div className="font-mono-tech text-[10px] text-amber/80">CONTACTO / LEGAL</div>
-            <ul className="mt-4 space-y-2 font-mono-tech text-[11px] text-muted-foreground">
+            <ul className="mt-4 space-y-2.5 font-mono-tech text-[11px] text-muted-foreground">
               <li>
                 <a href={WA_CONTACTO} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-amber transition">
-                  <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+                  <MessageCircle className="h-3.5 w-3.5" /> WhatsApp · +57 311 528 0288
                 </a>
-              </li>
               </li>
               <li><Link to="/privacidad" className="hover:text-amber transition">Política de Privacidad</Link></li>
               <li><Link to="/terminos" className="hover:text-amber transition">Términos y Condiciones</Link></li>
