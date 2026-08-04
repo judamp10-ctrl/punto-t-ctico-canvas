@@ -9,10 +9,11 @@ const VIDEOS = {
   mantenimiento: "/mantenimiento.mp4",
   ubicacion: "/ubicacion.mp4",
   municion: "/municion.mp4",
+  municion2: "/municion2.mp4",
 };
 
 
-const WA_CONTACTO = "https://wa.me/573027104931?text=Hola%20Punto%20T%C3%A1ctico,%20solicito%20asesor%C3%ADa%20para%20adquisici%C3%B3n";
+const WA_CONTACTO = "https://wa.me/573115280288?text=Hola%20Punto%20T%C3%A1ctico,%20solicito%20asesor%C3%ADa%20para%20adquisici%C3%B3n";
 
 /* ---------- Section shell ---------- */
 function SectionLabel({ index, label }: { index: string; label: string }) {
@@ -596,7 +597,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col justify-between gap-3 border-t border-[color:var(--amber)]/15 pt-6 font-mono-tech text-[10px] text-muted-foreground md:flex-row md:items-center">
-          <div>© {new Date().getFullYear()} · PUNTO TÁCTICO · PEREIRA, CO</div>
+          <div>© {new Date().getFullYear()} · PUNTO TÁCTICO · PALMIRA - VALLE, CO</div>
           <div className="flex items-center gap-4">
             <Link
               to="/perfil-operativo"

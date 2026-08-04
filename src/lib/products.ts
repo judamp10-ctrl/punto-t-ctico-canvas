@@ -27,12 +27,12 @@ export interface Product {
 }
 
 export const WHATSAPP_URL =
-  "https://wa.me/573027104931?text=Hola%20Punto%20T%C3%A1ctico,%20solicito%20asesor%C3%ADa%20para%20adquisici%C3%B3n";
+  "https://wa.me/573115280288?text=Hola%20Punto%20T%C3%A1ctico,%20solicito%20asesor%C3%ADa%20para%20adquisici%C3%B3n";
 
 /** Dynamic WhatsApp deep link including product name + selected variant. */
 export function whatsappForProduct(name: string, variantLabel?: string) {
   const base =
-    "https://wa.me/573027104931?text=Hola%20Punto%20T%C3%A1ctico,%20solicito%20asesor%C3%ADa%20para%20adquisici%C3%B3n%20del%20equipo:%20";
+    "https://wa.me/573115280288?text=Hola%20Punto%20T%C3%A1ctico,%20solicito%20asesor%C3%ADa%20para%20adquisici%C3%B3n%20del%20equipo:%20";
   const item = variantLabel ? `${name} - ${variantLabel}` : name;
   return base + encodeURIComponent(item);
 }
