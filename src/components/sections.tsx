@@ -354,22 +354,32 @@ export function Poligono() {
             </p>
           </div>
 
-          <div className="relative mx-auto max-w-2xl border border-[color:var(--amber)] bg-black shadow-[0_0_40px_-12px_rgba(245,166,35,0.45)]">
-            <div className="flex items-center justify-between border-b border-[color:var(--amber)]/40 px-3 py-1.5 font-mono-tech text-[9px] text-amber/80">
-              <span>REC · MUNICIÓN</span>
-              <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 animate-hud-pulse rounded-full bg-[color:var(--amber)]" />
-                BALÍSTICA
-              </span>
-            </div>
-            <video
-              src={VIDEOS.municion}
-              controls
-              muted
-              playsInline
-              preload="metadata"
-              className="block aspect-video w-full bg-black object-cover"
-            />
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+            {[
+              { src: VIDEOS.municion, tag: "REC · MUNICIÓN 01" },
+              { src: VIDEOS.municion2, tag: "REC · MUNICIÓN 02" },
+            ].map((v) => (
+              <div
+                key={v.tag}
+                className="relative border border-[color:var(--amber)] bg-black shadow-[0_0_40px_-12px_rgba(245,166,35,0.45)]"
+              >
+                <div className="flex items-center justify-between border-b border-[color:var(--amber)]/40 px-3 py-1.5 font-mono-tech text-[9px] text-amber/80">
+                  <span>{v.tag}</span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 animate-hud-pulse rounded-full bg-[color:var(--amber)]" />
+                    BALÍSTICA
+                  </span>
+                </div>
+                <video
+                  src={v.src}
+                  controls
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className="block aspect-video w-full bg-black object-cover"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
