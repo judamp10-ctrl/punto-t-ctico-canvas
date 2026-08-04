@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { AlertTriangle, Wrench, ScrollText, ShieldCheck, FileCheck, Fingerprint, Search, FileText, PackageCheck, MessageCircle, Instagram, Lock, Target, Droplet, Crosshair, MapPin } from "lucide-react";
+import { AlertTriangle, Wrench, ScrollText, ShieldCheck, FileCheck, Fingerprint, Search, FileText, PackageCheck, MessageCircle, Lock, Target, Droplet, Crosshair, MapPin } from "lucide-react";
 import { WHATSAPP_URL } from "@/components/Catalog";
 
 const VIDEOS = {
@@ -595,10 +595,6 @@ export function SiteFooter() {
                   <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
                 </a>
               </li>
-              <li>
-                <a href="https://instagram.com/puntotactico" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-amber transition">
-                  <Instagram className="h-3.5 w-3.5" /> Instagram
-                </a>
               </li>
               <li><Link to="/privacidad" className="hover:text-amber transition">Política de Privacidad</Link></li>
               <li><Link to="/terminos" className="hover:text-amber transition">Términos y Condiciones</Link></li>
